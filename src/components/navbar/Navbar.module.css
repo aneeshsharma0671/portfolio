@@ -1,27 +1,56 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #ffffff;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .logo a {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
-  }
-  
-  .navLinks a {
-    margin-left: 1.5rem;
-    font-size: 1rem;
-    color: #0073e6;
-    text-decoration: none;
-  }
-  
-  .navLinks a:hover {
-    text-decoration: underline;
-  }
-  
+  width: 100%; /* Make navbar stretch to full width */
+  display: flex;
+  flex-direction: column; /* Stack name and links on separate lines */
+  align-items: center; /* Center-align the header */
+  justify-content: space-between;
+  background-color: #000; /* Black background */
+  padding: 15px 30px;
+  font-family: Arial, sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 16px;
+  transition: color 0.3s ease; /* Smooth hover effect */
+}
+
+.navbar a:hover {
+  color: #1e90ff; /* Highlight color on hover */
+}
+
+.navbar .logo a {
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.navbar .logoLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.navbar .logo {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #444; /* Divider line between name and links */
+  width: 100%;
+  text-align: center;
+}
+
+.navbar .menu {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center-align the menu links */
+  margin-top: 10px; /* Add spacing between name and links */
+  padding-top: 10px; /* Add padding above links */
+}
+
+.navbar .menu-item {
+  margin: 0 15px;
+}
