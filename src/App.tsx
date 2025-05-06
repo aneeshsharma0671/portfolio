@@ -1,12 +1,7 @@
-import './App.css';
-import Navbar from './components/navbar/navbar';
+import HomePage from "./pages/HomePage";
 
 function App() {
-  return (
-    <div style={{ backgroundColor: 'black', color: 'white', width: '100%', height: '100%' }}>
-      <Navbar />
-    </div>
-  );
+  return <HomePage />;
 }
 
 export default App;
