@@ -28,6 +28,7 @@ export class Game extends Scene {
     });
     const tileset = map.addTilesetImage("tiles");
     const layer = map.createLayer(0, tileset!, 0, 0); // layer index, tileset, x, y
+    layer!.setScale(2); // Scale the layer to make it larger
     layer!.skipCull = true;
 
     this.input.once("pointerdown", () => {
