@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import DungeonGenerator from "../../DungeonGeneration/dungeonGenerator";
 
 export class Game extends Scene {
   camera: Phaser.Cameras.Scene2D.Camera;
@@ -21,18 +22,26 @@ export class Game extends Scene {
     this.background = this.add.image(512, 384, "background");
     this.background.setAlpha(0.5);
 
+    const gridSizeX = 128;
+    const gridSizeY = 64;
+    const dungeionGenerator = new DungeonGenerator();
+    const data = dungeionGenerator.GetDungeon(gridSizeX, gridSizeY);
+
     const map = this.make.tilemap({
       key: "map",
       tileWidth: 16,
       tileHeight: 16,
+      width: gridSizeX,
+      height: gridSizeY,
+      data: data,
     });
     const tileset = map.addTilesetImage("tiles");
     const layer = map.createLayer(0, tileset!, 0, 0); // layer index, tileset, x, y
-    layer!.setScale(2); // Scale the layer to make it larger
+    layer!.setScale(0.5); // Scale the layer to make it larger
     layer!.skipCull = true;
 
     this.input.once("pointerdown", () => {
-      this.scene.start("GameOver");
+      this.scene.start("Game");
     });
   }
 }
