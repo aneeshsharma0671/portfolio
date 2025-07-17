@@ -1,38 +1,55 @@
 export default class DungeonGenerator {
-  public GetDungeon(gridSizeX: number, gridSizeY: number): number[][] {
-    const finalData: number[][] = [];
-    for (let i = 0; i < gridSizeY; i++) {
-      finalData.push(new Array(gridSizeX).fill(0));
-    }
+  public GetDungeon(
+    gridSizeX: number,
+    gridSizeY: number
+  ): {
+    partitions: Rect[];
+    rooms: Rect[];
+    paths: Path[];
+  } {
+    const partitions: Rect[] = [];
+    const rooms: Rect[] = [];
 
     let root: bspNode | null = new bspNode(0, 0, gridSizeX, gridSizeY);
-    this.splitNode(root, 15, 15);
+    this.splitNode(root, 10, 15);
 
-    let fillValue = 10;
-    // traverse the BSP tree and fill the finalData array
-    const fillNode = (node: bspNode | null): void => {
+    const createRooms = (node: bspNode | null): void => {
       if (!node) return;
 
       if (node.left === null && node.right === null) {
         this.createRoom(node);
-        const roomRect = node.room!;
-        fillValue++;
-        for (let y = roomRect.y; y < roomRect.y + roomRect.height; y++) {
-          for (let x = roomRect.x; x < roomRect.x + roomRect.width; x++) {
-            if (x >= 0 && x < gridSizeX && y >= 0 && y < gridSizeY) {
-              finalData[y][x] = fillValue;
-            }
-          }
-        }
+        partitions.push(node.rect);
+        rooms.push(node.room!);
       }
 
-      fillNode(node.left);
-      fillNode(node.right);
+      createRooms(node.left);
+      createRooms(node.right);
     };
 
-    fillNode(root);
+    createRooms(root);
 
-    return finalData;
+    const paths: Path[] = [];
+    const collectPaths = (node: bspNode | null): void => {
+      if (!node || !node.left || !node.right) return;
+
+      const leftCenter = {
+        x: node.left.rect.x + Math.floor(node.left.rect.width / 2),
+        y: node.left.rect.y + Math.floor(node.left.rect.height / 2),
+      };
+      const rightCenter = {
+        x: node.right.rect.x + Math.floor(node.right.rect.width / 2),
+        y: node.right.rect.y + Math.floor(node.right.rect.height / 2),
+      };
+
+      paths.push({ pathStart: leftCenter, pathEnd: rightCenter });
+
+      collectPaths(node.left);
+      collectPaths(node.right);
+    };
+
+    collectPaths(root);
+
+    return { partitions, rooms, paths };
   }
 
   private splitNode(node: bspNode, minWidth: number, minHeight: number): void {
@@ -40,7 +57,7 @@ export default class DungeonGenerator {
       return;
     }
 
-    const maxRatio = 2; // Maximum allowed width/height or height/width ratio
+    const maxRatio = 1; // Maximum allowed width/height or height/width ratio
 
     // Decide split direction based on current node's aspect ratio
     let splitVertically: boolean;
@@ -111,37 +128,34 @@ export default class DungeonGenerator {
   }
 
   private createRoom(node: bspNode): void {
-    const minRoomSize = 10;
+    // Padding as a random percentage (0% to 25%) of node size, floored
+    const paddingPercentX = Math.random() * 0.25;
+    const paddingPercentY = Math.random() * 0.25;
+    const paddingX = Math.floor(node.rect.width * paddingPercentX);
+    const paddingY = Math.floor(node.rect.height * paddingPercentY);
 
-    // Calculate max possible padding (up to 25% of node size, floored)
-    const maxPaddingX = Math.floor(node.rect.width * 0.25);
-    const maxPaddingY = Math.floor(node.rect.height * 0.25);
+    // Room size is node size minus 2*padding
+    let roomWidth = node.rect.width - 2 * paddingX;
+    let roomHeight = node.rect.height - 2 * paddingY;
 
-    // Random padding between 0 and maxPadding
-    const paddingX = Math.floor(Math.random() * (maxPaddingX + 1));
-    const paddingY = Math.floor(Math.random() * (maxPaddingY + 1));
-
-    const maxRoomWidth = Math.max(minRoomSize, node.rect.width - 2 * paddingX);
-    const maxRoomHeight = Math.max(
-      minRoomSize,
-      node.rect.height - 2 * paddingY
-    );
-
-    const roomWidth =
-      Math.floor(Math.random() * (maxRoomWidth - minRoomSize + 1)) +
-      minRoomSize;
-    const roomHeight =
-      Math.floor(Math.random() * (maxRoomHeight - minRoomSize + 1)) +
-      minRoomSize;
-
+    // Enforce max aspect ratio (e.g., 2:1 or 1:2)
+    const maxRatio = 2; // width/height or height/width cannot exceed this
+    if (roomWidth / roomHeight > maxRatio) {
+      roomWidth = Math.floor(roomHeight * maxRatio);
+    } else if (roomHeight / roomWidth > maxRatio) {
+      roomHeight = Math.floor(roomWidth * maxRatio);
+    }
+    // Room position is randomly offset within the allowed padding area
+    const maxOffsetX = node.rect.width - roomWidth - paddingX;
+    const maxOffsetY = node.rect.height - roomHeight - paddingY;
     const roomX =
       node.rect.x +
       paddingX +
-      Math.floor(Math.random() * (maxRoomWidth - roomWidth + 1));
+      (maxOffsetX > 0 ? Math.floor(Math.random() * (maxOffsetX + 1)) : 0);
     const roomY =
       node.rect.y +
       paddingY +
-      Math.floor(Math.random() * (maxRoomHeight - roomHeight + 1));
+      (maxOffsetY > 0 ? Math.floor(Math.random() * (maxOffsetY + 1)) : 0);
 
     node.room = new Rect(roomX, roomY, roomWidth, roomHeight);
   }
@@ -171,3 +185,13 @@ class Rect {
     this.height = height;
   }
 }
+
+type Path = {
+  pathStart: Vector2;
+  pathEnd: Vector2;
+};
+
+type Vector2 = {
+  x: number;
+  y: number;
+};
