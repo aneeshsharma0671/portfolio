@@ -7,7 +7,7 @@ import About from './Pages/about';
 import Contact from './Pages/contact';
 import BackGround from './Components/Background';
 
-function App() {
+function App(){
   return (
     <div>
       <Router>
