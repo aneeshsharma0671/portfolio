@@ -1,0 +1,48 @@
+name: Build & Deploy Next.js
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}:latest .
+
+      - name: Push image
+        run: |
+          docker push ghcr.io/${{ github.repository }}:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            docker pull ghcr.io/${{ github.repository }}:latest
+            docker stop nextjs_app || true
+            docker rm nextjs_app || true
+            docker run -d \
+              --restart always \
+              --name nextjs_app \
+              -p 3000:3000 \
+              ghcr.io/${{ github.repository }}:latest
