@@ -1,6 +1,10 @@
-import { FaBars,FaCross } from 'react-icons/fa';
-import { NavLink as Link } from 'react-router-dom';
+import { FaBars, FaCross } from 'react-icons/fa';
+import Link from 'next/link';
 import styled from 'styled-components';
+
+interface SidebarProps {
+  isOpen: boolean;
+}
 
 export const Nav = styled.nav`
 position : relative;
@@ -14,15 +18,15 @@ justify-content: space-between;
 z-index: 12;
 `;
 
-export const Sidebar = styled.div`
+export const Sidebar = styled.div<SidebarProps>`
 position : absolute;
 background-color: #DFECE8;
 height: 100vh;
 width: 100vw;
-opacity: ${props => props.display === true ? 1 : 0};
+opacity: ${props => props.isOpen === true ? 1 : 0};
 overflow : hidden;
 transition: 0.5s;
-display: ${props => props.display === true ? 'flex' : 'none'};
+display: ${props => props.isOpen === true ? 'flex' : 'none'};
 z-index: 12;
 `;
 
@@ -40,35 +44,6 @@ padding: 0;
 padding-inline-start: 0;
 font-family: 'Pacifico', cursive;
 `;
-
-
-export const NavLink = styled(Link)`       
-color: #429C87;
-display: flex;
-align-items: center;
-text-decoration: none;
-padding: 0 1rem;
-height: 100%;
-cursor: pointer;
-font-family: 'Pacifico', cursive;
-font-size: 1.5rem;
-&:hover {
-	  color: #BBBBBB;
-}
-&.active {
-	color: #0C221D;
-}
-`;
-export const SidebarLink = styled(Link)`
-	color: darkcyan;
-	&:hover {
-		text-decoration: none;
-	}
-	&: visited {
-		text-decoration: none;
-	}
-}`;
-
 
 
 export const IconContainer = styled.div`

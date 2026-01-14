@@ -63,3 +63,35 @@ li a:visited{
         transform: translateX(0); 
     }
 }
+
+.nav-link {
+    color: #429C87;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
+    cursor: pointer;
+    font-family: 'Pacifico', cursive;
+    font-size: 1.5rem;
+}
+
+.nav-link:hover {
+    color: #BBBBBB;
+}
+
+.nav-link.active {
+    color: #0C221D;
+}
+
+.sidebar-link {
+    color: darkcyan;
+}
+
+.sidebar-link:hover {
+    text-decoration: none;
+}
+
+.sidebar-link:visited {
+    text-decoration: none;
+}

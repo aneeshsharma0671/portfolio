@@ -1,3 +1,7 @@
+@import url('//fonts.googleapis.com/css?family=Roboto:500');
+
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
 .Main-Div {
     position: relative;
     margin-left: 10vw;
@@ -32,9 +36,6 @@
 
 
 /* Icons in box */
-@import url('//fonts.googleapis.com/css?family=Roboto:500');
-
-@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 
 .social-icons {
   width: 100%;
