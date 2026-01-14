@@ -20,9 +20,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d out"
+    "lint": "next lint"
   },
   "eslintConfig": {
     "extends": [
@@ -43,7 +41,6 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.36",
-    "gh-pages": "^4.0.0"
+    "@types/styled-components": "^5.1.36"
   }
 }
