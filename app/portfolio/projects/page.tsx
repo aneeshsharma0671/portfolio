@@ -1,7 +1,6 @@
-import React from 'react';
-import Card from '../src/Components/Cards/projectCard';
+import Card from '../../../src/Components/Cards/projectCard';
 
-const Projects: React.FC = () => {
+export default function Projects() {
   const projectLogos = ['/ProjectLogos/Pandemic.png','/ProjectLogos/Flappy.png','/ProjectLogos/EduAR.png','/ProjectLogos/Office.png'];
 
   return (
@@ -15,6 +14,4 @@ const Projects: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default Projects;
+}

@@ -1,0 +1,55 @@
+{
+  "brandLine": "The Sharma Project is a living portfolio of Aneesh Sharma — showcasing work, ideas, and experiments at the intersection of engineering, product, and curiosity.",
+  "hero": {
+    "mainTitle": "The Sharma Project",
+    "taglines": [
+      "Building things.",
+      "Breaking them.",
+      "Learning fast."
+    ],
+    "introduction": "Hi, I'm Aneesh Sharma — a programmer and this site is a collection of my work, side projects, and ongoing experiments."
+  },
+  "whatIsThis": {
+    "title": "What This Is",
+    "description": "Not a company. Not a résumé. Just a project that keeps evolving. The Sharma Project documents what I'm building, learning, and shipping — from production-ready applications to half-baked experiments that taught me something valuable."
+  },
+  "workAreas": [
+    {
+      "title": "Engineering",
+      "description": "Scalable systems, clean APIs, thoughtful frontend.",
+      "icon": "🛠"
+    },
+    {
+      "title": "Product Thinking",
+      "description": "Designing with intent, balancing usability with constraints.",
+      "icon": "🧩"
+    },
+    {
+      "title": "Experiments",
+      "description": "Side projects, tools, and ideas worth exploring.",
+      "icon": "🚀"
+    }
+  ],
+  "philosophy": "I believe good software is less about clever code and more about clarity, empathy, and iteration. I care about shipping, learning in public, and improving one version at a time.",
+  "featuredProjects": [
+    {
+      "name": "Project One",
+      "description": "A thoughtfully built application that solves a real problem with clean code and great UX.",
+      "link": "/portfolio/projects"
+    },
+    {
+      "name": "Project Two",
+      "description": "An experiment that taught me valuable lessons about scalability and user feedback.",
+      "link": "/portfolio/projects"
+    }
+  ],
+  "current": {
+    "working": "Building scalable web applications with modern tech stack",
+    "learning": "System design patterns and architectural best practices",
+    "exploring": "The intersection of AI and product design"
+  },
+  "footerCta": {
+    "text": "Want to collaborate, chat, or build something interesting?",
+    "link": "/portfolio/contact"
+  }
+}

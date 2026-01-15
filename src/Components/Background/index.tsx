@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect } from 'react';
 
 const BackGround: React.FC = () => {
@@ -19,13 +21,13 @@ const BackGround: React.FC = () => {
 
   return (
     <div className='Background'>
-      <div className='mt-2'>
+      <div className='mt-2 mt'>
         <img src='/mt2.svg' className='layer' data-speed='1' />
       </div>
-      <div className='mt-1'>
+      <div className='mt-1 mt'>
         <img src='/mt1.svg' className='layer' data-speed='0.5' />
       </div>
-      <div className='mt-3'>
+      <div className='mt-3 mt'>
         <img src='/mt3.svg' className='layer' data-speed='1' />
       </div>
       <img src='/Cloud1.svg' className='cloud1' />

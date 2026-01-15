@@ -1,0 +1,51 @@
+.contentBlock {
+  width: 100%;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.title {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+}
+
+.description {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  line-height: 1.8;
+  color: #b0b0b0;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .contentBlock {
+    padding: 3rem 1rem;
+  }
+
+  .title {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contentBlock {
+    padding: 2rem 1rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .description {
+    font-size: 0.95rem;
+  }
+}
