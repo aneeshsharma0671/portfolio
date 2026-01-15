@@ -1,0 +1,166 @@
+.projectsSection {
+  width: 100%;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.subtitle {
+  font-size: 1rem;
+  text-align: center;
+  color: #b0b0b0;
+  margin-bottom: 2.5rem;
+}
+
+.projectsList {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.projectItem {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.projectItem:hover {
+  background: rgba(0, 102, 255, 0.08);
+  border-color: rgba(0, 102, 255, 0.3);
+  transform: translateX(4px);
+}
+
+.projectContent {
+  flex: 1;
+}
+
+.projectName {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+}
+
+.projectDescription {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #b0b0b0;
+  margin: 0;
+}
+
+.projectLink {
+  color: #0066ff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.projectLink:hover {
+  color: #0052cc;
+  text-decoration: underline;
+}
+
+.viewAllCta {
+  text-align: center;
+}
+
+.viewAllButton {
+  display: inline-block;
+  padding: 0.875rem 2rem;
+  background: transparent;
+  border: 2px solid #0066ff;
+  color: #0066ff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.viewAllButton:hover {
+  background: #0066ff;
+  color: white;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .projectsSection {
+    padding: 3rem 1rem;
+  }
+
+  .sectionTitle {
+    margin-bottom: 0.25rem;
+  }
+
+  .subtitle {
+    margin-bottom: 2rem;
+  }
+
+  .projectsList {
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .projectItem {
+    flex-direction: column;
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .projectsSection {
+    padding: 2rem 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .projectsList {
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .projectItem {
+    padding: 1rem;
+  }
+
+  .projectName {
+    font-size: 1rem;
+  }
+
+  .projectDescription {
+    font-size: 0.9rem;
+  }
+
+  .viewAllButton {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}

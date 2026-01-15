@@ -1,6 +1,4 @@
-import React from 'react';
-
-const Contact: React.FC = () => {
+export default function Contact() {
   return (
     <div className='Main-Div'>
       <div className='header'>Contact Me</div>
@@ -11,6 +9,4 @@ const Contact: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default Contact;
+}
