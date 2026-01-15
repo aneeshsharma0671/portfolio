@@ -19,12 +19,12 @@ const Homepage: React.FC = () => {
     <div className={styles.homepage}>
       {/* <div className={styles.brandLine}>{data.brandLine}</div> */}
       <HeroSection data={data.hero} />
-      <ContentBlock data={data.whatIsThis} />
+      {/* <ContentBlock data={data.whatIsThis} />
       <WorkAreasGrid areas={data.workAreas} />
       <PhilosophySection text={data.philosophy} />
       <FeaturedProjects projects={data.featuredProjects} />
       <CurrentStatus data={data.current} />
-      <FooterCTA text={data.footerCta.text} link={data.footerCta.link} />
+      <FooterCTA text={data.footerCta.text} link={data.footerCta.link} /> */}
     </div>
   );
 };
