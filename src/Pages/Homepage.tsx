@@ -11,6 +11,7 @@ import PhilosophySection from '../Components/Homepage/PhilosophySection';
 import CurrentStatus from '../Components/Homepage/CurrentStatus';
 import FooterCTA from '../Components/Homepage/FooterCTA';
 import styles from './Homepage.module.css';
+import Link from 'next/link';
 
 const Homepage: React.FC = () => {
   const data: HomepageContent = homepageData as unknown as HomepageContent;
@@ -25,6 +26,7 @@ const Homepage: React.FC = () => {
       <FeaturedProjects projects={data.featuredProjects} />
       <CurrentStatus data={data.current} />
       <FooterCTA text={data.footerCta.text} link={data.footerCta.link} /> */}
+      <Link href='/tools/lifecalender'>Life Calendar</Link>
     </div>
   );
 };
