@@ -14,6 +14,7 @@ const PreviewContainer = styled.div`
   align-items: flex-start;
   overflow: auto;
   max-height: 600px;
+  width: 1080px;
   padding: 1rem;
   background-color: #f9f9f9;
   border-radius: 8px;

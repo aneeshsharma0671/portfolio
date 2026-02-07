@@ -84,7 +84,7 @@ function createSVGFooter(): string {
 }
 
 function createTitle(x: number, y: number, text: string): string {
-  return `<text class="title" x="${x}" y="${y}">${text}</text>`;
+  return `<text class="title" x="${x}" y="${y}" text-anchor="middle">${text}</text>`;
 }
 
 function createInfoText(x: number, y: number, text: string): string {
@@ -214,6 +214,10 @@ export function generateYearCalendarSVG(config: YearCalendarConfig): string {
     textColor = '#999',
   } = config;
 
+  const containerWidth = 1080;
+  const containerHeight = 1920;
+  const xCenter = containerWidth / 2;
+
   const current = new Date(currentDate);
   const year = current.getFullYear();
   const dayOfYear = Math.floor(
@@ -251,71 +255,81 @@ export function generateYearCalendarSVG(config: YearCalendarConfig): string {
   const titleHeight = 50;
 
   const monthRows = Math.ceil(12 / monthsPerRow);
-  const containerWidth = monthsPerRow * monthWidth + margin * 2;
-  const containerHeight = titleHeight + monthRows * monthHeight + margin * 2;
 
   let svg = createSVGHeader(containerWidth, containerHeight, backgroundColor, titleColor, textColor);
 
   // Title
-  svg += createTitle(margin, 35, `Year ${year}`);
+  svg += createTitle(xCenter, 35, `Year ${year}`);
 
-//   let dayCounter = 0;
+  let dayCounter = 0;
 
-//   for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
-//     const monthRow = Math.floor(monthIndex / monthsPerRow);
-//     const monthCol = monthIndex % monthsPerRow;
+  const monthObj = (monthName: string, topLeftX: number, topLeftY: number) : string => {
+    const getTransformX = (x: number) => topLeftX + x;
+    const getTransformY = (y: number) => topLeftY + y;
 
-//     const monthX = margin + monthCol * monthWidth;
-//     const monthY = titleHeight + margin + monthRow * monthHeight;
+    let svg = '';
+      // Month title
+    svg += `<text class="month-label" x="${getTransformX(10)}" y="${getTransformY(20)}" text-anchor="start">${monthName}</text>`;
 
-//     // Month container
-//     svg += `<g transform="translate(${monthX}, ${monthY})">`;
+    return svg;
+  }
 
-//     // Month title
-//     svg += `<text class="month-label" x="10" y="20">${monthNames[monthIndex]}</text>`;
+  svg += monthObj('Jan', 10, 70);
+  // for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
+  //   const monthRow = Math.floor(monthIndex / monthsPerRow);
+  //   const monthCol = monthIndex % monthsPerRow;
 
-//     // Days grid for this month
-//     const daysInCurrentMonth = daysInMonth[monthIndex];
-//     const weeksNeeded = Math.ceil(daysInCurrentMonth / 7);
-//     const dayBoxSize = Math.floor((monthWidth - 20) / 7) - 2;
-//     const dayBoxSpacing = 2;
+  //   const monthX = margin + monthCol * monthWidth;
+  //   const monthY = titleHeight + margin + monthRow * monthHeight;
 
-//     for (let day = 1; day <= daysInCurrentMonth; day++) {
-//       dayCounter++;
-//       const week = Math.floor((day - 1) / 7);
-//       const dayOfWeek = (day - 1) % 7;
+  //   // Month container
+  //   svg += `<g transform="translate(${monthX}, ${monthY})">`;
 
-//       const x = 10 + dayOfWeek * (dayBoxSize + dayBoxSpacing);
-//       const y = 35 + week * (dayBoxSize + dayBoxSpacing);
+  //   // Month title
+  //   svg += `<text class="month-label" x="10" y="20">${monthNames[monthIndex]}</text>`;
 
-//       let boxColor = futureColor;
-//       if (dayCounter < dayOfYear) {
-//         boxColor = livedColor;
-//       } else if (dayCounter === dayOfYear) {
-//         boxColor = remainingColor;
-//       }
+  //   // Days grid for this month
+  //   const daysInCurrentMonth = daysInMonth[monthIndex];
+  //   const weeksNeeded = Math.ceil(daysInCurrentMonth / 7);
+  //   const dayBoxSize = Math.floor((monthWidth - 20) / 7) - 2;
+  //   const dayBoxSpacing = 2;
 
-//       svg += createBox(x, y, dayBoxSize, boxColor);
-//     }
+  //   for (let day = 1; day <= daysInCurrentMonth; day++) {
+  //     dayCounter++;
+  //     const week = Math.floor((day - 1) / 7);
+  //     const dayOfWeek = (day - 1) % 7;
 
-//     svg += `</g>`;
-//   }
+  //     const x = 10 + dayOfWeek * (dayBoxSize + dayBoxSpacing);
+  //     const y = 35 + week * (dayBoxSize + dayBoxSpacing);
 
-//   // Info text
-//   svg += createInfoText(
-//     margin,
-//     containerHeight - 10,
-//     `Day ${dayOfYear} of ${daysInMonth.reduce((a, b) => a + b, 0)} • ${daysInMonth.reduce((a, b) => a + b, 0) - dayOfYear} days remaining`
-//   );
+  //     let boxColor = futureColor;
+  //     if (dayCounter < dayOfYear) {
+  //       boxColor = livedColor;
+  //     } else if (dayCounter === dayOfYear) {
+  //       boxColor = remainingColor;
+  //     }
 
-//   // Legend
-//   svg += createLegend(margin, containerHeight - 40, 12, livedColor, remainingColor, futureColor, [
-//     'Days lived',
-//     'Today',
-//     'Days left',
-//   ]);
+  //     svg += createBox(x, y, dayBoxSize, boxColor);
+  //   }
 
-//   svg += createSVGFooter();
+  //   svg += `</g>`;
+  // }
+
+  // // Info text
+  // svg += createInfoText(
+  //   margin,
+  //   containerHeight - 10,
+  //   `Day ${dayOfYear} of ${daysInMonth.reduce((a, b) => a + b, 0)} • ${daysInMonth.reduce((a, b) => a + b, 0) - dayOfYear} days remaining`
+  // );
+
+  // // Legend
+  // svg += createLegend(margin, containerHeight - 40, 12, livedColor, remainingColor, futureColor, [
+  //   'Days lived',
+  //   'Today',
+  //   'Days left',
+  // ]);
+
+  svg += createSVGFooter();
 
   return svg;
 }
