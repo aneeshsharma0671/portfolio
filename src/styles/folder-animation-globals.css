@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Share+Tech+Mono&display=swap');
+
+:root {
+  --paper: #e8dfc8;
+  --paper-dark: #cfc3a0;
+  --ink: #1a1209;
+  --red: #c0392b;
+  --red-stamp: rgba(192, 57, 43, 0.85);
+  --green: #2d5a27;
+  --cover-mid: #cca96e;
+  --spine-w: 30px;
+  --page-w: 420px;
+  --page-h: 580px;
+  --tab-h: 26px;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
