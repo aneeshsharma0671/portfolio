@@ -43,6 +43,13 @@
       "link": "/portfolio/projects"
     }
   ],
+  "featuredExperiments": [
+    {
+      "name": "Folder Animation",
+      "description": "Interactive animation experiment exploring dynamic folder interactions and UI transitions.",
+      "link": "/experiments/folder-animation"
+    }
+  ],
   "current": {
     "working": "Building scalable web applications with modern tech stack",
     "learning": "System design patterns and architectural best practices",

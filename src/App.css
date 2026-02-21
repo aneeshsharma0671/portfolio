@@ -3,11 +3,11 @@ html {
 	box-sizing: border-box;
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-font-smoothing: antialiased;
-	overflow-x: hidden;
-	overflow-y: scroll;
 	text-rendering: optimizeLegibility;
 	font-size: 14px;
 	overscroll-behavior: none;
+	height: 100%;
+	overflow: hidden;
 }
 
 html:not(input) {
@@ -46,15 +46,14 @@ pre {
 
 body {
 	height: 100%;
-	margin: 0 auto;
+	margin: 0;
 	font-weight: 400;
 	font-size: 14px;
 	width: 100%;
 	overscroll-behavior: none;
 	background-color: black;
-	@media (max-width: 1024px) {
-		overflow: hidden;
-	}
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 input[type='text'][inputmode='numeric'] {
