@@ -7,6 +7,7 @@ import HeroSection from '../Components/Homepage/HeroSection';
 import ContentBlock from '../Components/Homepage/ContentBlock';
 import WorkAreasGrid from '../Components/Homepage/WorkAreasGrid';
 import FeaturedProjects from '../Components/Homepage/FeaturedProjects';
+import FeaturedExperiments from '../Components/Homepage/FeaturedExperiments';
 import PhilosophySection from '../Components/Homepage/PhilosophySection';
 import CurrentStatus from '../Components/Homepage/CurrentStatus';
 import FooterCTA from '../Components/Homepage/FooterCTA';
@@ -19,10 +20,11 @@ const Homepage: React.FC = () => {
     <div className={styles.homepage}>
       {/* <div className={styles.brandLine}>{data.brandLine}</div> */}
       <HeroSection data={data.hero} />
+      <FeaturedExperiments experiments={data.featuredExperiments} />
+      {/* <FeaturedProjects projects={data.featuredProjects} /> */}
       {/* <ContentBlock data={data.whatIsThis} />
       <WorkAreasGrid areas={data.workAreas} />
       <PhilosophySection text={data.philosophy} />
-      <FeaturedProjects projects={data.featuredProjects} />
       <CurrentStatus data={data.current} />
       <FooterCTA text={data.footerCta.text} link={data.footerCta.link} /> */}
     </div>

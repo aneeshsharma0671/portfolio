@@ -46,6 +46,7 @@ export interface HomepageContent {
   workAreas: WorkArea[];
   philosophy: string;
   featuredProjects: FeaturedProject[];
+  featuredExperiments: FeaturedProject[];
   current: CurrentStatus;
   footerCta: {
     text: string;

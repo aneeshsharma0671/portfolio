@@ -1,5 +1,5 @@
-import FolderAnimationPage from '../../../src/Components/FolderAnimationPage';
+import ClassifiedPortfolio from '@/src/Components/PortfolioPage';
 
 export default function FolderAnimation() {
-  return <FolderAnimationPage />;
+  return <ClassifiedPortfolio />;
 }
