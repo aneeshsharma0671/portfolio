@@ -48,6 +48,11 @@
       "name": "Folder Animation",
       "description": "Interactive animation experiment exploring dynamic folder interactions and UI transitions.",
       "link": "/experiments/folder-animation"
+    },
+    {
+      "name": "Boids Algorithm",
+      "description": "Paper plane boids simulation with flocking behavior, mouse interaction, and real-time configurable parameters.",
+      "link": "/experiments/threejs/boids"
     }
   ],
   "current": {

@@ -1,10 +1,10 @@
 import './App.css';
 import Navbar from './Components/Navbar/index';
 import { HashRouter as Router,Routes, Route } from 'react-router-dom';
-import Home from './Pages/home';
-import Projects from './Pages/projects';
-import About from './Pages/about';
-import Contact from './Pages/contact';
+import Home from "./LegacyPages/home";
+import Projects from "./LegacyPages/projects";
+import About from "./LegacyPages/about";
+import Contact from "./LegacyPages/contact";
 import BackGround from './Components/Background';
 
 function App() {
