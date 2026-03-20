@@ -1,0 +1,299 @@
+:root {
+  --page-peach: #fff4de;
+  --page-rose: #ffd2d8;
+  --page-cream: #fff9f0;
+  --ink-dark: #4b2431;
+  --ink-mid: #73424f;
+  --accent-rose: #cd4f76;
+  --accent-coral: #eb6a7c;
+}
+
+.page {
+  min-height: 100dvh;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--page-peach) 0%, var(--page-rose) 55%, #ffe6f1 100%);
+  color: var(--ink-dark);
+  font-family: 'Trebuchet MS', 'Gill Sans', sans-serif;
+  padding: 32px 16px 44px;
+}
+
+.bgGradient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.58), transparent 42%),
+    radial-gradient(circle at 80% 30%, rgba(255, 198, 213, 0.52), transparent 44%);
+}
+
+.blobA,
+.blobB {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(1.4px);
+  pointer-events: none;
+}
+
+.blobA {
+  width: 260px;
+  height: 260px;
+  right: -64px;
+  top: -44px;
+  background: rgba(255, 159, 184, 0.52);
+  animation: floatBlob 4.8s ease-in-out infinite;
+  animation-delay: var(--float-delay);
+}
+
+.blobB {
+  width: 300px;
+  height: 300px;
+  left: -120px;
+  bottom: -112px;
+  background: rgba(255, 208, 140, 0.58);
+  animation: floatBlob 5.6s ease-in-out infinite;
+}
+
+@keyframes floatBlob {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
+}
+
+.contentWrap {
+  position: relative;
+  z-index: 2;
+  width: min(720px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 18px;
+}
+
+.card,
+.choiceBlock,
+.acceptedCard {
+  background: rgba(255, 250, 242, 0.94);
+  border: 1px solid rgba(191, 71, 106, 0.2);
+  box-shadow: 0 20px 48px rgba(124, 57, 73, 0.16);
+  border-radius: 24px;
+  padding: 20px;
+}
+
+.badge,
+.acceptedBadge {
+  margin: 0;
+  display: inline-block;
+  background: rgba(235, 106, 124, 0.18);
+  color: #94294e;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 14px 0 8px;
+  line-height: 1.08;
+  font-size: clamp(1.7rem, 6vw, 2.4rem);
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--ink-mid);
+  font-size: 1rem;
+}
+
+.question {
+  margin: 18px 0 0;
+  font-size: 1.16rem;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.metaGrid {
+  margin-top: 16px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr;
+}
+
+.metaItem {
+  background: var(--page-cream);
+  border: 1px solid rgba(191, 71, 106, 0.16);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.metaItem p {
+  margin: 0;
+  color: var(--ink-mid);
+  font-size: 0.86rem;
+}
+
+.metaItem h3 {
+  margin: 4px 0 0;
+  font-size: 1.02rem;
+  line-height: 1.3;
+}
+
+.choiceBlock {
+  text-align: center;
+  display: grid;
+  gap: 14px;
+  align-items: center;
+}
+
+.yesButton,
+.noButton,
+.actionRow button {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.yesButton {
+  justify-self: center;
+  background: linear-gradient(140deg, var(--accent-rose), var(--accent-coral));
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(205, 79, 118, 0.36);
+}
+
+.yesButton:hover {
+  transform: scale(1.04);
+}
+
+.noButtonStage {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  background: rgba(255, 240, 226, 0.78);
+  border: 1px dashed rgba(191, 71, 106, 0.35);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.noButton {
+  position: absolute;
+  width: 108px;
+  background: #ffe0e5;
+  color: #8f3952;
+  border: 1px solid rgba(143, 57, 82, 0.25);
+  left: 16px;
+  top: 12px;
+  transition: left 0.2s ease, top 0.2s ease, background-color 0.2s ease;
+}
+
+.noButton:hover {
+  background: #ffd2db;
+}
+
+.noMessage {
+  margin: 0;
+  color: var(--ink-mid);
+  font-size: 0.95rem;
+}
+
+.acceptedCard h2 {
+  margin: 12px 0 8px;
+  font-size: clamp(1.4rem, 4.8vw, 2rem);
+}
+
+.acceptedCard p {
+  margin: 0;
+  color: var(--ink-mid);
+  line-height: 1.45;
+}
+
+.inviteBody {
+  margin-top: 14px;
+  background: #fff8ee;
+  border: 1px solid rgba(191, 71, 106, 0.16);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.actionRow {
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr;
+}
+
+.actionRow button {
+  background: #fff;
+  color: #6a2f3f;
+  border: 1px solid rgba(106, 47, 63, 0.22);
+}
+
+.actionRow button:hover:not(:disabled) {
+  background: #fff1f3;
+}
+
+.actionRow button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.shareHint {
+  margin-top: 12px;
+  font-size: 0.9rem;
+}
+
+.generating,
+.status,
+.hint {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #74414d;
+}
+
+.hint {
+  text-align: center;
+  background: rgba(255, 250, 242, 0.72);
+  border: 1px solid rgba(191, 71, 106, 0.16);
+  border-radius: 14px;
+  padding: 12px;
+  line-height: 1.45;
+}
+
+.hint code {
+  background: #fff;
+  padding: 2px 5px;
+  border-radius: 6px;
+  color: #5d2a39;
+}
+
+.status {
+  text-align: center;
+  font-weight: 600;
+}
+
+@media (min-width: 640px) {
+  .page {
+    padding: 48px 22px 56px;
+  }
+
+  .card,
+  .choiceBlock,
+  .acceptedCard {
+    padding: 24px;
+  }
+
+  .metaGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .actionRow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
