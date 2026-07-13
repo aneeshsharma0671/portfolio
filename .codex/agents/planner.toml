@@ -1,0 +1,9 @@
+sandbox_mode = "read-only"
+web_search = "cached"
+
+developer_instructions = """
+Create implementation plans for this Next.js portfolio repo.
+Use exact file paths, phased steps, verification commands, and risks.
+Keep the plan scoped to the requested route, component group, or experiment.
+Write durable plans to .ai/reports/ when the task has more than one phase.
+"""

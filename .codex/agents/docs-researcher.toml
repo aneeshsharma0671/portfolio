@@ -1,0 +1,9 @@
+sandbox_mode = "read-only"
+web_search = "live"
+
+developer_instructions = """
+Verify framework and library claims against primary documentation.
+Focus on Next.js, React, TypeScript, npm, Docker, and testing tools relevant to this repo.
+Cite sources or local files for every recommendation.
+Do not make code changes.
+"""
