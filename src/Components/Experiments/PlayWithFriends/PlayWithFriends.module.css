@@ -1,0 +1,487 @@
+.screen {
+  min-height: 100vh;
+  background:
+    linear-gradient(135deg, rgba(235, 240, 232, 0.94), rgba(245, 241, 232, 0.96)),
+    radial-gradient(circle at top left, rgba(39, 125, 119, 0.14), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(160, 74, 60, 0.12), transparent 36%);
+  color: #19211f;
+  padding: 32px;
+}
+
+.shell {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  margin: 4px 0 0;
+  font-size: clamp(2.2rem, 5vw, 4.8rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+  color: #111816;
+}
+
+.eyebrow,
+.panelKicker {
+  margin: 0;
+  color: #5f6d66;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.statusStrip,
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  border: 1px solid rgba(25, 33, 31, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+  padding: 0 14px;
+  color: #34413d;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(260px, 0.75fr) minmax(360px, 1.2fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.panel,
+.panelWide {
+  border: 1px solid rgba(25, 33, 31, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 18px 50px rgba(25, 33, 31, 0.08);
+  padding: 18px;
+}
+
+.panelWide {
+  grid-column: span 1;
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.panelHeader h2,
+.gameSurface h3 {
+  margin: 4px 0 0;
+  color: #18211e;
+  font-size: 1.28rem;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.panelIcon {
+  color: #277d77;
+  font-size: 1.35rem;
+}
+
+.roomCodeBox {
+  display: grid;
+  gap: 4px;
+  min-height: 94px;
+  align-content: center;
+  border: 1px dashed rgba(39, 125, 119, 0.46);
+  border-radius: 8px;
+  background: rgba(239, 248, 245, 0.9);
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+.roomCodeBox span,
+.metricRow span,
+.bridgeGrid span {
+  color: #68756f;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.roomCodeBox strong {
+  color: #123d39;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: clamp(2rem, 9vw, 3.5rem);
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.form,
+.lobbyControls {
+  display: grid;
+  gap: 14px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  color: #39453f;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.field input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(25, 33, 31, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #19211f;
+  font: inherit;
+  font-size: 1rem;
+  padding: 12px 13px;
+  outline: none;
+}
+
+.field input:focus {
+  border-color: #277d77;
+  box-shadow: 0 0 0 3px rgba(39, 125, 119, 0.14);
+}
+
+.primaryButton,
+.secondaryButton,
+.dangerButton,
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  border: 0;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    opacity 160ms ease;
+}
+
+.primaryButton {
+  background: #277d77;
+  color: #ffffff;
+  padding: 0 16px;
+  box-shadow: 0 10px 22px rgba(39, 125, 119, 0.24);
+}
+
+.secondaryButton {
+  background: #e4ebe5;
+  color: #24312d;
+  padding: 0 16px;
+}
+
+.dangerButton {
+  background: #f2dfda;
+  color: #8c3429;
+  padding: 0 16px;
+}
+
+.iconButton {
+  width: 42px;
+  flex: 0 0 42px;
+  background: #e4ebe5;
+  color: #24312d;
+}
+
+.primaryButton:hover,
+.secondaryButton:hover,
+.dangerButton:hover,
+.iconButton:hover,
+.gameTile:hover,
+.playerRow:hover {
+  transform: translateY(-1px);
+}
+
+.primaryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.46;
+  transform: none;
+  box-shadow: none;
+}
+
+.metricRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.metricRow div,
+.bridgeGrid div {
+  display: grid;
+  gap: 5px;
+  border: 1px solid rgba(25, 33, 31, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.58);
+  padding: 12px;
+}
+
+.metricRow strong,
+.bridgeGrid strong {
+  color: #18211e;
+  font-size: 1.2rem;
+  line-height: 1.1;
+}
+
+.playerList {
+  display: grid;
+  gap: 10px;
+}
+
+.playerRow {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  border: 1px solid rgba(25, 33, 31, 0.11);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.66);
+  color: inherit;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #dce9e6;
+  color: #15534e;
+  font-weight: 900;
+}
+
+.playerRow strong,
+.playerRow small {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.playerRow small {
+  margin-top: 3px;
+  color: #62716a;
+  font-size: 0.78rem;
+}
+
+.ready,
+.notReady,
+.gameTile em {
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 900;
+  padding: 5px 8px;
+  text-transform: uppercase;
+}
+
+.ready {
+  background: #dff1df;
+  color: #276229;
+}
+
+.notReady {
+  background: #eee7dc;
+  color: #736044;
+}
+
+.emptyState {
+  margin: 0;
+  border: 1px dashed rgba(25, 33, 31, 0.16);
+  border-radius: 8px;
+  color: #66736d;
+  padding: 28px 14px;
+  text-align: center;
+}
+
+.gameGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.gameTile {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  min-height: 116px;
+  border: 1px solid rgba(25, 33, 31, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.62);
+  color: inherit;
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gameTileSelected {
+  border-color: rgba(39, 125, 119, 0.65);
+  background: rgba(232, 246, 242, 0.94);
+}
+
+.gameIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: #dce9e6;
+  color: #277d77;
+}
+
+.gameTile strong,
+.gameTile small {
+  display: block;
+}
+
+.gameTile small {
+  margin-top: 4px;
+  color: #62716a;
+}
+
+.gameTile em {
+  grid-column: 2;
+  justify-self: start;
+  background: #f1e4d9;
+  color: #8a4d22;
+}
+
+.gameTileSelected em {
+  background: #dff1df;
+  color: #276229;
+}
+
+.gameSurface {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 168px;
+  gap: 18px;
+  align-items: center;
+  border: 1px solid rgba(25, 33, 31, 0.11);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.58);
+  padding: 16px;
+}
+
+.gameSurface p {
+  margin: 8px 0 0;
+  color: #5e6b65;
+  line-height: 1.5;
+}
+
+.boardPreview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 168px;
+  aspect-ratio: 1;
+  border: 2px solid #22302c;
+  background: #f8fbf7;
+}
+
+.boardPreview span {
+  display: grid;
+  place-items: center;
+  border: 1px solid #22302c;
+  color: #a04a3c;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.bridgeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.eventLog {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.eventLog li {
+  border-left: 3px solid #277d77;
+  background: rgba(255, 255, 255, 0.5);
+  color: #3d4b45;
+  padding: 8px 10px;
+}
+
+@media (max-width: 1080px) {
+  .workspace {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .panelWide {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 720px) {
+  .screen {
+    padding: 18px;
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .workspace,
+  .gameGrid,
+  .bridgeGrid,
+  .gameSurface {
+    grid-template-columns: 1fr;
+  }
+
+  .panelWide {
+    grid-column: span 1;
+  }
+
+  .boardPreview {
+    width: min(100%, 220px);
+  }
+
+  .playerRow {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+
+  .ready,
+  .notReady {
+    grid-column: 2;
+    justify-self: start;
+  }
+}

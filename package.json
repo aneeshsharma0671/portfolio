@@ -20,13 +20,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "lint": "eslint ."
   },
   "browserslist": {
     "production": [
@@ -41,6 +35,10 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.36"
+    "@eslint/js": "^10.0.1",
+    "@next/eslint-plugin-next": "^16.2.11",
+    "@types/styled-components": "^5.1.36",
+    "eslint": "^10.7.0",
+    "typescript-eslint": "^8.65.0"
   }
 }
