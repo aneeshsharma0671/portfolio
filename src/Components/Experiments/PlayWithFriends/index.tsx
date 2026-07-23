@@ -1,6 +1,6 @@
 'use client';
 
-import { type FormEvent, useMemo, useReducer, useState } from 'react';
+import { type FormEvent, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import {
   FaBolt,
   FaCheck,
@@ -14,83 +14,19 @@ import {
   FaUsers,
 } from 'react-icons/fa';
 
+import GameScreen from './components/GameScreen';
 import styles from './PlayWithFriends.module.css';
-
-type LobbyStatus = 'idle' | 'joining' | 'lobby' | 'game';
-
-type Player = {
-  id: string;
-  name: string;
-  role: 'host' | 'guest';
-  ready: boolean;
-  connection: 'local' | 'mock' | 'offline';
-};
-
-type GameOption = {
-  id: string;
-  name: string;
-  players: string;
-  status: 'ready' | 'planned';
-  description: string;
-};
-
-type LobbyState = {
-  status: LobbyStatus;
-  roomCode: string;
-  playerName: string;
-  joinCode: string;
-  selectedGameId: string;
-  activeGameId: string | null;
-  players: Player[];
-  eventLog: string[];
-};
-
-type LobbyAction =
-  | { type: 'set-player-name'; name: string }
-  | { type: 'set-join-code'; code: string }
-  | { type: 'host-room'; roomCode: string }
-  | { type: 'show-join' }
-  | { type: 'join-preview' }
-  | { type: 'add-mock-player' }
-  | { type: 'toggle-ready'; playerId: string }
-  | { type: 'select-game'; gameId: string }
-  | { type: 'start-game' }
-  | { type: 'leave' };
-
-const gameOptions: GameOption[] = [
-  {
-    id: 'tic-tac-toe',
-    name: 'Tic Tac Toe',
-    players: '2 players',
-    status: 'ready',
-    description: 'Turn based board game bridge target.',
-  },
-  {
-    id: 'connect-four',
-    name: 'Connect Four',
-    players: '2 players',
-    status: 'planned',
-    description: 'Next deterministic board game candidate.',
-  },
-  {
-    id: 'card-table',
-    name: 'Card Table',
-    players: '2-6 players',
-    status: 'planned',
-    description: 'Shared table shell for future card games.',
-  },
-];
-
-const initialState: LobbyState = {
-  status: 'idle',
-  roomCode: '',
-  playerName: '',
-  joinCode: '',
-  selectedGameId: gameOptions[0].id,
-  activeGameId: null,
-  players: [],
-  eventLog: ['Lobby shell loaded'],
-};
+import {
+  PLAY_WITH_FRIENDS_GAMES,
+  canPlayerToggleReady,
+  createInitialPlayWithFriendsState,
+  getGameById,
+  getGameSeating,
+  getPlayerPermissions,
+  getStartGate,
+  lobbyReducer,
+  type GameDefinition,
+} from './state';
 
 function createPlayerId(prefix: string) {
   return `${prefix}-${Math.random().toString(36).slice(2, 8)}`;
@@ -100,178 +36,75 @@ function createRoomCode() {
   return Math.random().toString(36).slice(2, 8).toUpperCase();
 }
 
-function getDisplayName(name: string) {
-  const trimmed = name.trim();
-
-  if (!trimmed) {
-    return 'Player';
-  }
-
-  return trimmed.slice(0, 24);
+function createSessionId() {
+  return `session-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-function pushLog(state: LobbyState, message: string): string[] {
-  return [message, ...state.eventLog].slice(0, 5);
+function getPlayerRange(game: GameDefinition) {
+  if (game.minPlayers === game.maxPlayers) {
+    return `${game.minPlayers} players`;
+  }
+
+  return `${game.minPlayers}-${game.maxPlayers} players`;
 }
 
-function lobbyReducer(state: LobbyState, action: LobbyAction): LobbyState {
-  switch (action.type) {
-    case 'set-player-name':
-      return {
-        ...state,
-        playerName: action.name,
-      };
-
-    case 'set-join-code':
-      return {
-        ...state,
-        joinCode: action.code
-          .toUpperCase()
-          .replace(/[^A-Z0-9]/g, '')
-          .slice(0, 8),
-      };
-
-    case 'host-room': {
-      const hostName = getDisplayName(state.playerName);
-
-      return {
-        ...state,
-        status: 'lobby',
-        roomCode: action.roomCode,
-        players: [
-          {
-            id: createPlayerId('host'),
-            name: hostName,
-            role: 'host',
-            ready: true,
-            connection: 'local',
-          },
-        ],
-        eventLog: pushLog(state, `${hostName} created room ${action.roomCode}`),
-      };
-    }
-
-    case 'show-join':
-      return {
-        ...state,
-        status: 'joining',
-        eventLog: pushLog(state, 'Join panel opened'),
-      };
-
-    case 'join-preview': {
-      const guestName = getDisplayName(state.playerName);
-      const roomCode = state.joinCode || createRoomCode();
-
-      return {
-        ...state,
-        status: 'lobby',
-        roomCode,
-        players: [
-          {
-            id: createPlayerId('host'),
-            name: 'Remote host',
-            role: 'host',
-            ready: true,
-            connection: 'mock',
-          },
-          {
-            id: createPlayerId('guest'),
-            name: guestName,
-            role: 'guest',
-            ready: false,
-            connection: 'local',
-          },
-        ],
-        eventLog: pushLog(state, `${guestName} joined preview room ${roomCode}`),
-      };
-    }
-
-    case 'add-mock-player': {
-      const mockPlayerNumber =
-        state.players.filter((player) => player.connection === 'mock').length + 1;
-      const mockPlayer: Player = {
-        id: createPlayerId('mock'),
-        name: `Friend ${mockPlayerNumber}`,
-        role: 'guest',
-        ready: mockPlayerNumber % 2 === 0,
-        connection: 'mock',
-      };
-
-      return {
-        ...state,
-        players: [...state.players, mockPlayer],
-        eventLog: pushLog(state, `${mockPlayer.name} joined locally`),
-      };
-    }
-
-    case 'toggle-ready':
-      return {
-        ...state,
-        players: state.players.map((player) =>
-          player.id === action.playerId
-            ? {
-                ...player,
-                ready: !player.ready,
-              }
-            : player,
-        ),
-      };
-
-    case 'select-game':
-      return {
-        ...state,
-        selectedGameId: action.gameId,
-        eventLog: pushLog(
-          state,
-          `Selected ${
-            gameOptions.find((game) => game.id === action.gameId)?.name ?? 'game'
-          }`,
-        ),
-      };
-
-    case 'start-game':
-      return {
-        ...state,
-        status: 'game',
-        activeGameId: state.selectedGameId,
-        eventLog: pushLog(state, 'Started local game preview'),
-      };
-
-    case 'leave':
-      return {
-        ...initialState,
-        playerName: state.playerName,
-        eventLog: pushLog(initialState, 'Lobby closed'),
-      };
-
-    default:
-      return state;
-  }
+function getGameStatusLabel(game: GameDefinition) {
+  return game.status === 'playable' ? 'ready' : 'planned';
 }
 
 export default function PlayWithFriendsExperience() {
-  const [state, dispatch] = useReducer(lobbyReducer, initialState);
+  const [state, dispatch] = useReducer(
+    lobbyReducer,
+    createInitialPlayWithFriendsState(),
+  );
   const [copied, setCopied] = useState(false);
+  const [announcement, setAnnouncement] = useState('Play With Friends loaded.');
+  const screenTitleRef = useRef<HTMLHeadingElement>(null);
 
   const selectedGame = useMemo(
-    () => gameOptions.find((game) => game.id === state.selectedGameId) ?? gameOptions[0],
+    () => getGameById(state.selectedGameId) ?? PLAY_WITH_FRIENDS_GAMES[0],
     [state.selectedGameId],
   );
   const activeGame = useMemo(
-    () => gameOptions.find((game) => game.id === state.activeGameId) ?? selectedGame,
+    () => (state.activeGameId ? getGameById(state.activeGameId) : null) ?? selectedGame,
     [selectedGame, state.activeGameId],
   );
+  const screenModel = useMemo(
+    () => ({
+      activeGame,
+      permissions: getPlayerPermissions(state),
+      seating: getGameSeating(state.players, selectedGame),
+      selectedGame,
+      startGate: getStartGate(state),
+    }),
+    [activeGame, selectedGame, state],
+  );
   const readyCount = state.players.filter((player) => player.ready).length;
-  const canStartGame = state.players.length >= 1 && selectedGame.status === 'ready';
+  const startReasonId = 'play-with-friends-start-reason';
+
+  useEffect(() => {
+    if (state.phase !== 'game') {
+      screenTitleRef.current?.focus();
+    }
+  }, [state.phase]);
 
   function handleHostRoom(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    dispatch({ type: 'host-room', roomCode: createRoomCode() });
+    dispatch({
+      type: 'host-room',
+      hostPlayerId: createPlayerId('host'),
+      roomCode: createRoomCode(),
+    });
   }
 
   function handleJoinPreview(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    dispatch({ type: 'join-preview' });
+    dispatch({
+      type: 'join-preview',
+      fallbackRoomCode: createRoomCode(),
+      guestPlayerId: createPlayerId('guest'),
+      hostPlayerId: createPlayerId('host'),
+    });
   }
 
   async function handleCopyRoomCode() {
@@ -284,18 +117,61 @@ export default function PlayWithFriendsExperience() {
     window.setTimeout(() => setCopied(false), 1400);
   }
 
+  function handleAddMockPlayer() {
+    dispatch({
+      type: 'add-mock-player',
+      actorPlayerId: state.localPlayerId ?? undefined,
+      playerId: createPlayerId('mock'),
+    });
+  }
+
+  function handleStartGame() {
+    dispatch({
+      type: 'start-game',
+      actorPlayerId: state.localPlayerId ?? undefined,
+      sessionId: createSessionId(),
+      startedAt: Date.now(),
+    });
+    setAnnouncement(
+      screenModel.startGate.canStart ? 'Game screen opened.' : screenModel.startGate.reason,
+    );
+  }
+
+  function handleReturnToLobby() {
+    dispatch({
+      type: 'return-to-lobby',
+      actorPlayerId: state.localPlayerId ?? undefined,
+    });
+    setAnnouncement('Returned to lobby.');
+  }
+
+  function handleLeaveLobby() {
+    dispatch({ type: 'leave' });
+    setAnnouncement('Lobby closed.');
+  }
+
+  function handleAnnouncement(message: string) {
+    setAnnouncement(message);
+  }
+
   return (
     <main className={styles.screen}>
       <section className={styles.shell} aria-labelledby="play-with-friends-title">
         <header className={styles.header}>
           <div>
             <p className={styles.eyebrow}>Experiment</p>
-            <h1 id="play-with-friends-title">Play With Friends</h1>
+            <h1 id="play-with-friends-title" ref={screenTitleRef} tabIndex={-1}>
+              Play With Friends
+            </h1>
           </div>
           <div className={styles.statusStrip} aria-label="Lobby status">
             <span className={styles.statusPill}>
               <FaPlug aria-hidden="true" />
               Local adapter
+            </span>
+            <span className={styles.statusPill}>
+              <FaGamepad aria-hidden="true" />
+              {state.phase}
             </span>
             <span className={styles.statusPill}>
               <FaMicrophoneSlash aria-hidden="true" />
@@ -304,15 +180,40 @@ export default function PlayWithFriendsExperience() {
           </div>
         </header>
 
-        <div className={styles.workspace}>
+        <p className={styles.visuallyHidden} aria-live="polite">
+          {announcement || state.lastError || screenModel.startGate.reason}
+        </p>
+
+        {state.phase === 'game' && state.activeGameSession ? (
+          <GameScreen
+            game={activeGame}
+            session={state.activeGameSession}
+            players={state.players}
+            localPlayerId={state.localPlayerId}
+            hostPlayerId={state.hostPlayerId}
+            roomCode={state.roomCode}
+            canReturnToLobby={screenModel.permissions.canReturnToLobby}
+            onReturnToLobby={handleReturnToLobby}
+            onLeaveLobby={handleLeaveLobby}
+            onAnnounce={handleAnnouncement}
+          />
+        ) : (
+          <div className={styles.workspace}>
           <section className={styles.panel} aria-labelledby="lobby-heading">
             <div className={styles.panelHeader}>
               <div>
                 <p className={styles.panelKicker}>Lobby</p>
-                <h2 id="lobby-heading">Room setup</h2>
+                <h2 id="lobby-heading">
+                  {state.phase === 'entry' ? 'Room setup' : 'Room'}
+                </h2>
               </div>
               {state.roomCode ? (
-                <button className={styles.iconButton} type="button" onClick={handleCopyRoomCode} aria-label="Copy room code">
+                <button
+                  className={styles.iconButton}
+                  type="button"
+                  onClick={handleCopyRoomCode}
+                  aria-label="Copy room code"
+                >
                   {copied ? <FaCheck aria-hidden="true" /> : <FaCopy aria-hidden="true" />}
                 </button>
               ) : null}
@@ -323,7 +224,7 @@ export default function PlayWithFriendsExperience() {
               <strong>{state.roomCode || '------'}</strong>
             </div>
 
-            {state.status === 'idle' ? (
+            {state.phase === 'entry' ? (
               <form className={styles.form} onSubmit={handleHostRoom}>
                 <label className={styles.field}>
                   <span>Your name</span>
@@ -355,7 +256,7 @@ export default function PlayWithFriendsExperience() {
               </form>
             ) : null}
 
-            {state.status === 'joining' ? (
+            {state.phase === 'joining' ? (
               <form className={styles.form} onSubmit={handleJoinPreview}>
                 <label className={styles.field}>
                   <span>Your name</span>
@@ -393,7 +294,7 @@ export default function PlayWithFriendsExperience() {
                   <button
                     className={styles.secondaryButton}
                     type="button"
-                    onClick={() => dispatch({ type: 'leave' })}
+                    onClick={handleLeaveLobby}
                   >
                     Cancel
                   </button>
@@ -401,7 +302,7 @@ export default function PlayWithFriendsExperience() {
               </form>
             ) : null}
 
-            {state.status === 'lobby' || state.status === 'game' ? (
+            {state.phase === 'lobby' || state.phase === 'game' ? (
               <div className={styles.lobbyControls}>
                 <div className={styles.metricRow}>
                   <div>
@@ -416,18 +317,20 @@ export default function PlayWithFriendsExperience() {
                   </div>
                 </div>
                 <div className={styles.actions}>
-                  <button
-                    className={styles.secondaryButton}
-                    type="button"
-                    onClick={() => dispatch({ type: 'add-mock-player' })}
-                  >
-                    <FaPlus aria-hidden="true" />
-                    Add friend
-                  </button>
+                  {screenModel.permissions.canAddMockPlayer ? (
+                    <button
+                      className={styles.secondaryButton}
+                      type="button"
+                      onClick={handleAddMockPlayer}
+                    >
+                      <FaPlus aria-hidden="true" />
+                      Add friend
+                    </button>
+                  ) : null}
                   <button
                     className={styles.dangerButton}
                     type="button"
-                    onClick={() => dispatch({ type: 'leave' })}
+                    onClick={handleLeaveLobby}
                   >
                     <FaSignOutAlt aria-hidden="true" />
                     Leave
@@ -448,23 +351,46 @@ export default function PlayWithFriendsExperience() {
 
             <div className={styles.playerList}>
               {state.players.length ? (
-                state.players.map((player) => (
-                  <button
-                    key={player.id}
-                    className={styles.playerRow}
-                    type="button"
-                    onClick={() => dispatch({ type: 'toggle-ready', playerId: player.id })}
-                  >
-                    <span className={styles.avatar}>{player.name.slice(0, 1).toUpperCase()}</span>
-                    <span>
-                      <strong>{player.name}</strong>
-                      <small>
-                        {player.role} - {player.connection}
-                      </small>
-                    </span>
-                    <em className={player.ready ? styles.ready : styles.notReady}>{player.ready ? 'Ready' : 'Idle'}</em>
-                  </button>
-                ))
+                state.players.map((player) => {
+                  const canToggleReady = canPlayerToggleReady(
+                    state,
+                    state.localPlayerId,
+                    player.id,
+                  );
+                  const isSeated =
+                    state.activeGameSession?.activePlayerIds.includes(player.id) ??
+                    screenModel.seating.activePlayerIds.includes(player.id);
+
+                  return (
+                    <button
+                      key={player.id}
+                      className={styles.playerRow}
+                      type="button"
+                      disabled={!canToggleReady}
+                      onClick={() =>
+                        dispatch({
+                          type: 'toggle-ready',
+                          actorPlayerId: state.localPlayerId ?? undefined,
+                          playerId: player.id,
+                        })
+                      }
+                    >
+                      <span className={styles.avatar}>
+                        {player.name.slice(0, 1).toUpperCase()}
+                      </span>
+                      <span>
+                        <strong>{player.name}</strong>
+                        <small>
+                          {player.role} - {player.connection} -{' '}
+                          {isSeated ? 'seated' : 'spectator'}
+                        </small>
+                      </span>
+                      <em className={player.ready ? styles.ready : styles.notReady}>
+                        {player.ready ? 'Ready' : 'Idle'}
+                      </em>
+                    </button>
+                  );
+                })
               ) : (
                 <p className={styles.emptyState}>No players yet</p>
               )}
@@ -475,50 +401,90 @@ export default function PlayWithFriendsExperience() {
             <div className={styles.panelHeader}>
               <div>
                 <p className={styles.panelKicker}>Games</p>
-                <h2 id="games-heading">Game table</h2>
+                <h2 id="games-heading">
+                  {state.phase === 'game' ? 'Active game' : 'Game table'}
+                </h2>
               </div>
-              <button
-                className={styles.primaryButton}
-                type="button"
-                disabled={!canStartGame}
-                onClick={() => dispatch({ type: 'start-game' })}
-              >
-                <FaPlay aria-hidden="true" />
-                Start
-              </button>
+              {state.phase === 'game' ? (
+                <button
+                  className={styles.secondaryButton}
+                  type="button"
+                  disabled={!screenModel.permissions.canReturnToLobby}
+                  onClick={handleReturnToLobby}
+                >
+                  Return to lobby
+                </button>
+              ) : (
+                <button
+                  className={styles.primaryButton}
+                  type="button"
+                  aria-describedby={startReasonId}
+                  disabled={!screenModel.startGate.canStart}
+                  onClick={handleStartGame}
+                >
+                  <FaPlay aria-hidden="true" />
+                  Start
+                </button>
+              )}
             </div>
 
-            <div className={styles.gameGrid}>
-              {gameOptions.map((game) => (
-                <button
-                  key={game.id}
-                  className={`${styles.gameTile} ${
-                    state.selectedGameId === game.id ? styles.gameTileSelected : ''
-                  }`}
-                  type="button"
-                  onClick={() => dispatch({ type: 'select-game', gameId: game.id })}
+            {state.phase !== 'game' ? (
+              <>
+                <div className={styles.gameGrid}>
+                  {PLAY_WITH_FRIENDS_GAMES.map((game) => (
+                    <button
+                      key={game.id}
+                      className={`${styles.gameTile} ${
+                        state.selectedGameId === game.id ? styles.gameTileSelected : ''
+                      }`}
+                      type="button"
+                      disabled={!screenModel.permissions.canSelectGame}
+                      onClick={() =>
+                        dispatch({
+                          type: 'select-game',
+                          actorPlayerId: state.localPlayerId ?? undefined,
+                          gameId: game.id,
+                        })
+                      }
+                    >
+                      <span className={styles.gameIcon}>
+                        <FaGamepad aria-hidden="true" />
+                      </span>
+                      <span>
+                        <strong>{game.name}</strong>
+                        <small>{getPlayerRange(game)}</small>
+                      </span>
+                      <em>{getGameStatusLabel(game)}</em>
+                    </button>
+                  ))}
+                </div>
+                <p
+                  id={startReasonId}
+                  className={styles.startReason}
+                  aria-live="polite"
                 >
-                  <span className={styles.gameIcon}>
-                    <FaGamepad aria-hidden="true" />
-                  </span>
-                  <span>
-                    <strong>{game.name}</strong>
-                    <small>{game.players}</small>
-                  </span>
-                  <em>{game.status}</em>
-                </button>
-              ))}
-            </div>
+                  {screenModel.startGate.reason}
+                </p>
+              </>
+            ) : null}
 
             <div className={styles.gameSurface}>
               <div>
-                <p className={styles.panelKicker}>{state.status === 'game' ? 'Active' : 'Selected'}</p>
-                <h3>{state.status === 'game' ? activeGame.name : selectedGame.name}</h3>
-                <p>{state.status === 'game' ? 'Local game shell is running.' : selectedGame.description}</p>
+                <p className={styles.panelKicker}>
+                  {state.phase === 'game' ? 'Active' : 'Selected'}
+                </p>
+                <h3>{state.phase === 'game' ? activeGame.name : selectedGame.name}</h3>
+                <p>
+                  {state.phase === 'game'
+                    ? 'Local game shell is running for the seated players.'
+                    : selectedGame.description}
+                </p>
               </div>
               <div className={styles.boardPreview} aria-label="Board preview">
                 {Array.from({ length: 9 }, (_, index) => (
-                  <span key={index}>{state.status === 'game' && index % 2 === 0 ? 'X' : ''}</span>
+                  <span key={index}>
+                    {state.phase === 'game' && index % 2 === 0 ? 'X' : ''}
+                  </span>
                 ))}
               </div>
             </div>
@@ -543,10 +509,16 @@ export default function PlayWithFriendsExperience() {
                 <strong>Host</strong>
               </div>
               <div>
-                <span>Next adapter</span>
-                <strong>Trystero</strong>
+                <span>Active seats</span>
+                <strong>{screenModel.startGate.activePlayerIds.length}</strong>
               </div>
             </div>
+
+            {state.lastError ? (
+              <p className={styles.startReason} aria-live="polite">
+                {state.lastError}
+              </p>
+            ) : null}
 
             <ol className={styles.eventLog} aria-label="Lobby events">
               {state.eventLog.map((event) => (
@@ -554,7 +526,8 @@ export default function PlayWithFriendsExperience() {
               ))}
             </ol>
           </section>
-        </div>
+          </div>
+        )}
       </section>
     </main>
   );

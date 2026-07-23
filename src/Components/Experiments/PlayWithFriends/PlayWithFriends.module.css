@@ -13,6 +13,15 @@
   margin: 0 auto;
 }
 
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -219,7 +228,11 @@
   transform: translateY(-1px);
 }
 
-.primaryButton:disabled {
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.dangerButton:disabled,
+.gameTile:disabled,
+.playerRow:disabled {
   cursor: not-allowed;
   opacity: 0.46;
   transform: none;
@@ -380,6 +393,16 @@
 .gameTileSelected em {
   background: #dff1df;
   color: #276229;
+}
+
+.startReason {
+  margin: 0 0 14px;
+  border-left: 3px solid #277d77;
+  background: rgba(255, 255, 255, 0.54);
+  color: #3d4b45;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  padding: 9px 10px;
 }
 
 .gameSurface {

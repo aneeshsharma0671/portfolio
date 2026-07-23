@@ -1,5 +1,5 @@
 {
   "agent": "codex",
   "permissionMode": "bypassPermissions",
-  "goalMode": false
+  "goalMode": true
 }

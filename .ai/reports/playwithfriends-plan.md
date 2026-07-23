@@ -1,5 +1,7 @@
 # Play With Friends Experiment Plan
 
+> Current milestone note: `.ai/reports/playwithfriends-prd.md` is now the source of truth for the first implementation pass. The WebRTC/manual-signaling phases and verification items in this older plan are future-only until a later networking milestone explicitly reopens them. First implementation scope is local mock adapter only, Tic Tac Toe playable, Connect Four/Card Table planned, no new networking dependencies.
+
 ## Goal
 
 Create a browser-based multiplayer games experiment at `/experiment/playwithfriends` where one player hosts a lobby, friends join the lobby, and the group can launch different web games through a shared peer-to-peer networking layer.

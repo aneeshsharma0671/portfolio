@@ -20,7 +20,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "vitest run --exclude src/App.test.js",
+    "test:watch": "vitest --exclude src/App.test.js"
   },
   "browserslist": {
     "production": [
@@ -39,6 +41,7 @@
     "@next/eslint-plugin-next": "^16.2.11",
     "@types/styled-components": "^5.1.36",
     "eslint": "^10.7.0",
-    "typescript-eslint": "^8.65.0"
+    "typescript-eslint": "^8.65.0",
+    "vitest": "^4.1.10"
   }
 }

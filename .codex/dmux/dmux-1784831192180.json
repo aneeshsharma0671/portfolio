@@ -1,0 +1,12 @@
+{
+  "source": "codex-stop-hook",
+  "dmuxPaneId": "dmux-1784831192180",
+  "tmuxPaneId": "%27",
+  "hookEventName": "Stop",
+  "turnId": "019f9067-627a-7963-8388-d7811ab62d26",
+  "stopHookActive": false,
+  "lastAssistantMessage": "It’s running locally:\n\n`http://localhost:3001/experiment/playwithfriends`\n\nThe route is responding `200 OK`.",
+  "transcriptPath": "/Users/aneesh.sharma@zomato.com/.codex/sessions/2026/07/23/rollout-2026-07-23T23-56-49-019f903a-ee68-7542-88fa-95770bfc8a2c.jsonl",
+  "cwd": "/Users/aneesh.sharma@zomato.com/personal-code/portfolio/.dmux/worktrees/work-playwithfriendsexperiment",
+  "timestamp": 1784834141995
+}
