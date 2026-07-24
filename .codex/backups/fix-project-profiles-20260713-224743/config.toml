@@ -1,0 +1,57 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+# Project-local Codex setup for the portfolio repo.
+# Keep this lean; user-level ~/.codex/config.toml can provide MCP servers.
+
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "live"
+
+persistent_instructions = """
+Use root AGENTS.md as the contributor guide and .ai/context.md as durable repo context.
+Keep repo context separate from other projects. Prefer targeted file reads over broad scans.
+Use child agents only for scoped work, and write multi-step plans/reviews under .ai/reports/.
+For this repo, verify with npm run build and npm run lint when relevant.
+"""
+
+[features]
+multi_agent = true
+
+[profiles.readonly]
+approval_policy = "on-request"
+sandbox_mode = "read-only"
+web_search = "cached"
+
+[profiles.review]
+approval_policy = "on-request"
+sandbox_mode = "read-only"
+web_search = "cached"
+
+[profiles.localdev]
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "live"
+
+[agents]
+max_threads = 4
+max_depth = 1
+
+[agents.explorer]
+description = "Read-only codebase explorer for mapping routes, components, styles, and dependencies."
+config_file = "agents/explorer.toml"
+
+[agents.planner]
+description = "Read-only implementation planner for multi-file portfolio changes."
+config_file = "agents/planner.toml"
+
+[agents.implementer]
+description = "Scoped implementer for one route, component group, or style area at a time."
+config_file = "agents/implementer.toml"
+
+[agents.reviewer]
+description = "Read-only reviewer focused on correctness, React/Next behavior, accessibility, and missing checks."
+config_file = "agents/reviewer.toml"
+
+[agents.docs_researcher]
+description = "Docs researcher for Next.js, React, TypeScript, and package behavior."
+config_file = "agents/docs-researcher.toml"

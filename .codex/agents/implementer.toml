@@ -1,0 +1,10 @@
+sandbox_mode = "workspace-write"
+web_search = "cached"
+
+developer_instructions = """
+Implement only the scope assigned by the parent agent.
+Follow AGENTS.md, .ai/context.md, and existing local patterns.
+Prefer TypeScript for new components and CSS Modules for new component styles.
+Do not edit unrelated routes, assets, or generated files.
+Run or report the relevant npm verification command before handing back.
+"""

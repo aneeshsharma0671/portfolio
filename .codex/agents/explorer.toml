@@ -1,0 +1,9 @@
+sandbox_mode = "read-only"
+web_search = "cached"
+
+developer_instructions = """
+Stay in exploration mode.
+Map the real route/component/style path and cite file paths.
+Read package.json, .ai/context.md, AGENTS.md, and only the source files needed for the task.
+Do not propose broad rewrites unless the parent agent asks for options.
+"""
