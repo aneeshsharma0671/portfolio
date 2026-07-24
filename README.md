@@ -1,70 +1,297 @@
-# Getting Started with Create React App
+# Portfolio Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Next.js portfolio app with experiments, including the Play With Friends multiplayer game prototype.
 
-## Available Scripts
+## Development
 
-In the project directory, you can run:
+Install dependencies:
 
-### `npm start`
+```bash
+pnpm ci
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Run the local Next.js dev server:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+pnpm run dev
+```
 
-### `npm test`
+Open:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```text
+http://localhost:3000
+```
 
-### `npm run build`
+## Verification
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Run the standard checks before merging or deploying:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+pnpm test
+pnpm run lint
+pnpm run build
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Nakama Local Checks Before Production Deploy
 
-### `npm run eject`
+Create a local Nakama env file:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+cp .env.nakama.example .env.nakama.local
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Edit `.env.nakama.local` and replace every `replace-with-*` value. Use local-only random strings. Do not commit `.env.nakama.local`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Validate the app:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm ci
+npm test
+npm run lint
+npm run build
+```
 
-## Learn More
+### Install And Start Docker
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+On macOS, install Docker Desktop from Docker's official installer, then start the app:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+open -a Docker
+```
 
-### Code Splitting
+Wait until Docker Desktop reports that it is running, then verify the Docker daemon:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+docker info
+```
 
-### Analyzing the Bundle Size
+If `docker info` fails with a message like `failed to connect to the docker API` or `Cannot connect to the Docker daemon`, Docker is installed but the daemon is not running. Open Docker Desktop and wait for it to finish starting before continuing.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Check Compose:
 
-### Making a Progressive Web App
+```bash
+docker-compose --version
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+If your Docker Desktop install provides Compose v2, this may also work:
 
-### Advanced Configuration
+```bash
+docker compose version
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+The local commands below use `docker-compose` because it works across more local installs. If your machine only supports Compose v2, replace `docker-compose` with `docker compose`.
 
-### Deployment
+Validate Docker Compose:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```bash
+docker-compose --env-file .env.nakama.local --profile nakama config
+```
 
-### `npm run build` fails to minify
+If `docker-compose` does not support `--env-file`, use Compose's default `.env` loading:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+cp .env.nakama.local .env
+COMPOSE_PROFILES=nakama docker-compose config
+```
+
+`.env` is ignored by git. Remove it when you no longer need the local Docker fallback:
+
+```bash
+rm .env
+```
+
+If you prefer Compose v2 and see `docker: unknown command: docker compose`, update Docker Desktop or install the Compose plugin:
+
+```bash
+brew install docker-compose
+mkdir -p ~/.docker/cli-plugins
+ln -sfn "$(brew --prefix)/opt/docker-compose/bin/docker-compose" ~/.docker/cli-plugins/docker-compose
+docker compose version
+```
+
+### Podman Alternative
+
+If Docker Desktop is restricted on your machine, use Podman with `podman-compose`:
+
+```bash
+brew install podman podman-compose
+podman machine init --cpus 4 --memory 6 --disk-size 30
+podman machine start
+podman info
+```
+
+Validate the Compose file with Podman:
+
+```bash
+podman-compose --env-file .env.nakama.local --profile nakama config
+```
+
+Start the local stack with Podman:
+
+```bash
+podman-compose --env-file .env.nakama.local --profile nakama up --build
+```
+
+Check running services and Nakama logs:
+
+```bash
+podman-compose --env-file .env.nakama.local --profile nakama ps
+podman-compose --env-file .env.nakama.local --profile nakama logs -f nakama
+```
+
+Stop the Podman stack:
+
+```bash
+podman-compose --env-file .env.nakama.local --profile nakama down
+```
+
+Remove local Nakama Postgres data when you need a clean Podman database:
+
+```bash
+podman-compose --env-file .env.nakama.local --profile nakama down -v
+```
+
+If your Podman install exposes `podman compose`, that may also work:
+
+```bash
+podman compose --env-file .env.nakama.local --profile nakama up --build
+```
+
+Podman Compose compatibility is close to Docker Compose but not identical. If it fails on service health dependencies, use the Docker-free native Nakama path or add a local Podman override.
+
+Start the local stack:
+
+```bash
+docker-compose --env-file .env.nakama.local --profile nakama up --build
+```
+
+If you had to use the `.env` fallback above:
+
+```bash
+cp .env.nakama.local .env
+COMPOSE_PROFILES=nakama docker-compose up --build
+```
+
+The first startup downloads Postgres and Nakama images, then builds the Next app image. It requires the Docker daemon to be running.
+
+Expected local URLs:
+
+```text
+Next app:        http://localhost:3000
+Nakama API:     http://127.0.0.1:7350
+Nakama console: http://127.0.0.1:7351
+Postgres:       127.0.0.1:5433
+```
+
+Check running services and logs:
+
+```bash
+docker-compose --env-file .env.nakama.local --profile nakama ps
+docker-compose --env-file .env.nakama.local --profile nakama logs -f nakama
+```
+
+For the `.env` fallback, use the same commands without `--env-file`:
+
+```bash
+COMPOSE_PROFILES=nakama docker-compose ps
+COMPOSE_PROFILES=nakama docker-compose logs -f nakama
+```
+
+The Nakama logs should include:
+
+```text
+Play With Friends Nakama runtime loaded.
+```
+
+Open the Nakama console:
+
+```text
+http://127.0.0.1:7351
+```
+
+Use `NAKAMA_CONSOLE_USERNAME` and `NAKAMA_CONSOLE_PASSWORD` from `.env.nakama.local`.
+
+Smoke check the current Play With Friends route:
+
+```text
+http://localhost:3000/experiments/playwithfriends
+```
+
+This route still uses the local mock network adapter until the Nakama client adapter is implemented.
+
+Stop the local stack:
+
+```bash
+docker-compose --env-file .env.nakama.local --profile nakama down
+```
+
+Remove local Nakama Postgres data when you need a clean database:
+
+```bash
+docker-compose --env-file .env.nakama.local --profile nakama down -v
+```
+
+For the `.env` fallback:
+
+```bash
+COMPOSE_PROFILES=nakama docker-compose down
+COMPOSE_PROFILES=nakama docker-compose down -v
+rm .env
+```
+
+## Production Deployment Notes
+
+The deploy workflow uses GitHub Actions production secrets and variables to write `.env.production` on the server, then starts the Compose stack with the `nakama` profile.
+
+Before deploying, SSH into the server and confirm Docker Engine is running:
+
+```bash
+docker --version
+docker info
+```
+
+Then check Docker Compose. The deploy workflow requires Compose v2:
+
+```bash
+docker compose version
+```
+
+If that command does not work, install the Compose v2 plugin. If the server has a broken Docker apt source from a previous attempt, remove that source first:
+
+```bash
+sudo rm -f /etc/apt/sources.list.d/docker.list
+```
+
+Then install the Compose plugin from Docker's repository:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y docker-compose-plugin
+docker compose version
+```
+
+Required production secrets:
+
+```text
+SSH_HOST
+SSH_USER
+SSH_KEY
+NAKAMA_POSTGRES_USER
+NAKAMA_POSTGRES_PASSWORD
+NAKAMA_SOCKET_SERVER_KEY
+NAKAMA_SESSION_ENCRYPTION_KEY
+NAKAMA_SESSION_REFRESH_ENCRYPTION_KEY
+NAKAMA_RUNTIME_HTTP_KEY
+NAKAMA_CONSOLE_USERNAME
+NAKAMA_CONSOLE_PASSWORD
+```
+
+Required production variables:
+
+```text
+NEXT_PUBLIC_NAKAMA_HOST
+NEXT_PUBLIC_NAKAMA_PORT
+NEXT_PUBLIC_NAKAMA_USE_SSL
+```
+
+Keep Nakama console, gRPC, and Postgres ports private. Use the public Nakama HTTP/WebSocket endpoint behind TLS for browser clients.
