@@ -1,0 +1,12 @@
+name: portfolio-nakama
+data_dir: /nakama/data
+
+logger:
+  level: INFO
+
+runtime:
+  path: /nakama/data/modules
+  js_entrypoint: index.js
+
+session:
+  token_expiry_sec: 7200
