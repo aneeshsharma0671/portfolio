@@ -1,17 +1,17 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
-import PlayWithFriendsExperience from '@/src/Components/Experiments/PlayWithFriends';
+import { PlayWithFriendsEntryView } from '@/src/Components/Experiments/PlayWithFriends/PlayWithFriendsRouteViews';
 
 export const metadata: Metadata = {
   title: 'Play With Friends | The Sharma Project',
-  description: 'A local lobby prototype for browser games with friends.',
+  description: 'Local and online lobby flow for browser games with friends.',
 };
 
 export default function PlayWithFriendsRoutePage() {
   return (
     <Suspense>
-      <PlayWithFriendsExperience />
+      <PlayWithFriendsEntryView />
     </Suspense>
   );
 }

@@ -25,6 +25,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
+            -f dockerfile \
             --build-arg NEXT_PUBLIC_NAKAMA_SERVER_KEY="${{ secrets.NAKAMA_SOCKET_SERVER_KEY }}" \
             --build-arg NEXT_PUBLIC_NAKAMA_HOST="${{ vars.NEXT_PUBLIC_NAKAMA_HOST }}" \
             --build-arg NEXT_PUBLIC_NAKAMA_PORT="${{ vars.NEXT_PUBLIC_NAKAMA_PORT }}" \
@@ -95,7 +96,7 @@ jobs:
             chmod 600 .env.production
 
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-            docker compose --env-file .env.production --profile nakama pull
-            docker rm -f nextjs_app || true
-            docker compose --env-file .env.production --profile nakama up -d --no-build --remove-orphans
+            docker compose --env-file .env.production --profile nakama pull web nakama
+            docker compose --env-file .env.production --profile nakama up -d --no-build --no-recreate nakama-postgres
+            docker compose --env-file .env.production --profile nakama up -d --no-build --no-deps --force-recreate web nakama
             docker image prune -f
