@@ -112,6 +112,7 @@ describe('Nakama developer tools helpers', () => {
       message: 'this',
     });
     expect(parseNakamaDeveloperCommand('status')).toEqual({ type: 'status' });
+    expect(parseNakamaDeveloperCommand('server-key')).toEqual({ type: 'server-key' });
     expect(parseNakamaDeveloperCommand('clear')).toEqual({ type: 'clear' });
     expect(parseNakamaDeveloperCommand('help')).toEqual({ type: 'help' });
     expect(parseNakamaDeveloperCommand('wat')).toEqual({

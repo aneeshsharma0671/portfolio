@@ -1332,7 +1332,22 @@ export default function PlayWithFriendsRouteShell({
       appendTerminalEntry({
         level: 'info',
         source: 'terminal',
-        message: 'Commands: connect, status, log <message>, clear, help.',
+        message: 'Commands: connect, status, server-key, log <message>, clear, help.',
+      });
+      return;
+    }
+
+    if (command.type === 'server-key') {
+      appendTerminalEntry({
+        level: serverKey.trim() ? 'info' : 'error',
+        source: 'config',
+        message: serverKey.trim()
+          ? `Server key: ${serverKey.trim()}`
+          : 'Server key is empty.',
+      });
+      logNakamaDebugEvent('terminal:server-key', {
+        serverKey,
+        visible: 'explicit-command',
       });
       return;
     }
@@ -1587,7 +1602,7 @@ export default function PlayWithFriendsRouteShell({
                       autoComplete="off"
                       autoCorrect="off"
                       spellCheck={false}
-                      placeholder="help | connect | status | log this"
+                      placeholder="help | connect | status | server-key"
                       aria-label="Developer console command"
                       onChange={(event) => setTerminalInput(event.target.value)}
                     />

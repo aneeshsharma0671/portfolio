@@ -697,7 +697,22 @@ export default function NakamaLobbyTest() {
       appendTerminalEntry({
         level: 'info',
         source: 'terminal',
-        message: 'Commands: connect, status, log <message>, clear, help.',
+        message: 'Commands: connect, status, server-key, log <message>, clear, help.',
+      });
+      return;
+    }
+
+    if (command.type === 'server-key') {
+      appendTerminalEntry({
+        level: serverKey.trim() ? 'info' : 'error',
+        source: 'config',
+        message: serverKey.trim()
+          ? `Server key: ${serverKey.trim()}`
+          : 'Server key is empty.',
+      });
+      logNakamaDebugEvent('terminal:server-key', {
+        serverKey,
+        visible: 'explicit-command',
       });
       return;
     }
@@ -844,7 +859,7 @@ export default function NakamaLobbyTest() {
                     autoComplete="off"
                     autoCorrect="off"
                     spellCheck={false}
-                    placeholder="help | connect | status | log this"
+                    placeholder="help | connect | status | server-key"
                     aria-label="Developer console command"
                     onChange={(event) => setTerminalInput(event.target.value)}
                   />
@@ -906,15 +921,6 @@ export default function NakamaLobbyTest() {
             </div>
 
             <form className={styles.form} onSubmit={handleAuthenticate}>
-              <label className={styles.field}>
-                <span>Server key</span>
-                <input
-                  type="password"
-                  value={serverKey}
-                  autoComplete="off"
-                  onChange={(event) => setServerKey(event.target.value)}
-                />
-              </label>
               <div className={styles.fieldRow}>
                 <label className={styles.field}>
                   <span>Host</span>
