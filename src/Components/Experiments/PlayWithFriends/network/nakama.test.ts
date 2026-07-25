@@ -3,7 +3,9 @@ import { describe, expect, it } from 'vitest';
 import {
   NAKAMA_MATCH_STATE_OP_CODES,
   createNakamaClientConfig,
+  decodeNakamaPeerMessagePayload,
   decodeNakamaPeerMessage,
+  encodeNakamaPeerMessagePayload,
   encodeNakamaPeerMessage,
 } from './nakama';
 import type { PeerMessageEnvelope } from './protocol';
@@ -51,6 +53,16 @@ describe('Nakama network bridge helpers', () => {
     const decoded = decodeNakamaPeerMessage(encoded);
 
     expect(decoded).toEqual({
+      ok: true,
+      message: baseMessage,
+    });
+  });
+
+  it('encodes and decodes byte payloads for Nakama match state', () => {
+    const encoded = encodeNakamaPeerMessagePayload(baseMessage);
+
+    expect(encoded).toBeInstanceOf(Uint8Array);
+    expect(decodeNakamaPeerMessagePayload(encoded)).toEqual({
       ok: true,
       message: baseMessage,
     });

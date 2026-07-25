@@ -2,7 +2,7 @@ export type PlayWithFriendsPhase = 'entry' | 'joining' | 'lobby' | 'game';
 
 export type PlayerRole = 'host' | 'guest';
 
-export type PlayerConnection = 'local' | 'mock' | 'offline';
+export type PlayerConnection = 'local' | 'remote' | 'mock' | 'offline';
 
 export type Player = {
   id: string;
@@ -74,7 +74,7 @@ export type PlayWithFriendsState = {
   hostPlayerId: string | null;
   players: Player[];
   eventLog: string[];
-  connectionMode: 'local-mock';
+  connectionMode: 'local-mock' | 'nakama';
   lastError: string | null;
 };
 

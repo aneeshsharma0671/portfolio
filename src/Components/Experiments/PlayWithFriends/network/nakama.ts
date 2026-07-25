@@ -40,6 +40,19 @@ export function decodeNakamaPeerMessage(
   return parsePeerMessage(payload, seenMessageIds);
 }
 
+export function encodeNakamaPeerMessagePayload(message: PeerMessageEnvelope) {
+  return new TextEncoder().encode(encodeNakamaPeerMessage(message));
+}
+
+export function decodeNakamaPeerMessagePayload(
+  payload: string | ArrayBuffer | Uint8Array,
+  seenMessageIds?: Set<string>,
+): ProtocolParseResult {
+  const text = typeof payload === 'string' ? payload : new TextDecoder().decode(payload);
+
+  return decodeNakamaPeerMessage(text, seenMessageIds);
+}
+
 function parseBooleanEnv(value: string | undefined) {
-  return value === '1' || value === 'true';
+  return value === '1' || value?.toLowerCase() === 'true';
 }

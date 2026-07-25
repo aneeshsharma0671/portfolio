@@ -1,0 +1,856 @@
+.screen {
+  min-height: 100vh;
+  background:
+    linear-gradient(135deg, rgba(241, 245, 240, 0.96), rgba(237, 240, 244, 0.94)),
+    radial-gradient(circle at top left, rgba(36, 116, 97, 0.16), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(174, 69, 54, 0.12), transparent 34%);
+  color: #17201d;
+  padding: 32px;
+}
+
+.shell {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.developerConsole {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  left: 16px;
+  z-index: 20;
+  width: min(1040px, calc(100vw - 32px));
+  margin: 0 auto;
+  border: 1px solid rgba(23, 32, 29, 0.16);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(20, 31, 27, 0.98), rgba(9, 14, 13, 0.98));
+  box-shadow: 0 22px 54px rgba(16, 23, 21, 0.22);
+  color: #edf4ef;
+  overflow: hidden;
+}
+
+.developerConsoleHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  border-bottom: 1px solid rgba(237, 244, 239, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 8px 10px;
+}
+
+.developerConsoleTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 148px;
+  color: #f8fbf8;
+  font-size: 0.92rem;
+  font-weight: 900;
+}
+
+.developerConsoleButton,
+.developerConsoleLauncher {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(237, 244, 239, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #edf4ef;
+  cursor: pointer;
+}
+
+.developerConsoleButton {
+  width: 38px;
+  height: 38px;
+  margin-left: auto;
+}
+
+.developerConsoleLauncher {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 20;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 12px;
+  box-shadow: 0 14px 34px rgba(16, 23, 21, 0.2);
+  font: inherit;
+  font-weight: 900;
+}
+
+.developerConsoleLauncher strong {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #7fd5a8;
+  color: #08100d;
+  font-size: 0.72rem;
+}
+
+.developerConsoleBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(250px, 0.38fr);
+  min-height: 340px;
+  max-height: min(62vh, 520px);
+}
+
+.developerSelect {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  width: min(220px, 100%);
+}
+
+.developerSelect span {
+  color: #9fb3ad;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.developerSelect select {
+  width: 100%;
+  min-height: 38px;
+  appearance: none;
+  border: 1px solid rgba(237, 244, 239, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #edf4ef;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  padding: 0 38px 0 10px;
+  outline: none;
+}
+
+.developerSelect select:focus {
+  border-color: #75c4b6;
+  box-shadow: 0 0 0 3px rgba(117, 196, 182, 0.2);
+}
+
+.developerSelect svg {
+  position: absolute;
+  right: 12px;
+  bottom: 11px;
+  color: #9fb3ad;
+  pointer-events: none;
+}
+
+.terminalPanel {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-width: 0;
+  background:
+    linear-gradient(rgba(127, 213, 168, 0.045) 50%, transparent 50%),
+    rgba(4, 10, 8, 0.86);
+  background-size: 100% 4px;
+}
+
+.terminalOutput {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px;
+}
+
+.terminalLine {
+  display: grid;
+  grid-template-columns: 126px minmax(0, 1fr);
+  gap: 8px 10px;
+  color: #d4eadc;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.terminalMeta {
+  color: #789388;
+  white-space: nowrap;
+}
+
+.terminalMessage,
+.terminalDetails {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.terminalDetails {
+  grid-column: 2;
+  color: #9fb3ad;
+  font: inherit;
+}
+
+.terminalLineDebug .terminalMessage {
+  color: #d4eadc;
+}
+
+.terminalLineError .terminalMessage {
+  color: #ff8e82;
+}
+
+.terminalLineInfo .terminalMessage {
+  color: #86c7ff;
+}
+
+.terminalLineInput .terminalMessage {
+  color: #f7d67a;
+}
+
+.terminalLineSuccess .terminalMessage {
+  color: #7fd5a8;
+}
+
+.terminalCommandLine {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  border-top: 1px solid rgba(237, 244, 239, 0.12);
+  background: rgba(0, 0, 0, 0.38);
+  color: #f7d67a;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.95rem;
+  padding: 9px 12px;
+}
+
+.terminalCommandLine input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: #edf4ef;
+  font: inherit;
+  outline: none;
+}
+
+.terminalCommandLine input::placeholder {
+  color: #789388;
+}
+
+.developerInfoPanel {
+  min-width: 0;
+  border-left: 1px solid rgba(237, 244, 239, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  overflow: auto;
+  padding: 12px;
+}
+
+.developerInfoTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #f8fbf8;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.developerInfoList {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+
+.developerInfoRow {
+  display: grid;
+  grid-template-columns: minmax(82px, 0.45fr) minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  border-top: 1px solid rgba(237, 244, 239, 0.1);
+  padding-top: 8px;
+}
+
+.developerInfoRow dt {
+  color: #9fb3ad;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.developerInfoRow dd {
+  margin: 0;
+  color: #f8fbf8;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-end;
+  margin-bottom: 18px;
+}
+
+.header h1 {
+  margin: 4px 0 0;
+  color: #101715;
+  font-size: clamp(2rem, 4.5vw, 4.3rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.eyebrow,
+.panelKicker {
+  margin: 0;
+  color: #64716b;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.statusStrip,
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  max-width: 320px;
+  border: 1px solid rgba(23, 32, 29, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.64);
+  color: #34433e;
+  font-size: 0.86rem;
+  font-weight: 800;
+  padding: 0 14px;
+  overflow-wrap: anywhere;
+}
+
+.liveStatus {
+  min-height: 42px;
+  border: 1px solid rgba(36, 116, 97, 0.22);
+  border-radius: 8px;
+  background: rgba(239, 249, 245, 0.84);
+  color: #174d43;
+  font-size: 0.92rem;
+  font-weight: 800;
+  padding: 12px 14px;
+  margin: 0 0 16px;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(270px, 0.9fr) minmax(280px, 0.9fr) minmax(360px, 1.2fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.panel,
+.gamePanel {
+  border: 1px solid rgba(23, 32, 29, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: 0 18px 50px rgba(23, 32, 29, 0.08);
+  padding: 18px;
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.panelHeader h2 {
+  margin: 4px 0 0;
+  color: #18211e;
+  font-size: 1.28rem;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.panelIcon {
+  color: #247461;
+  font-size: 1.35rem;
+}
+
+.form {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px;
+  gap: 10px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  color: #3b4842;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.field input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(23, 32, 29, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #17201d;
+  font: inherit;
+  font-size: 1rem;
+  min-height: 42px;
+  padding: 10px 12px;
+  outline: none;
+}
+
+.field input:focus {
+  border-color: #247461;
+  box-shadow: 0 0 0 3px rgba(36, 116, 97, 0.15);
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  color: #34433e;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: #247461;
+}
+
+.primaryButton,
+.secondaryButton,
+.dangerButton,
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  border: 0;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.primaryButton {
+  background: #247461;
+  color: #ffffff;
+  padding: 0 16px;
+  box-shadow: 0 10px 22px rgba(36, 116, 97, 0.23);
+}
+
+.secondaryButton {
+  background: #e2e8e3;
+  color: #26332f;
+  padding: 0 16px;
+}
+
+.dangerButton {
+  background: #f1ddda;
+  color: #8a352d;
+  padding: 0 16px;
+}
+
+.iconButton {
+  width: 42px;
+  flex: 0 0 42px;
+  background: #e2e8e3;
+  color: #26332f;
+}
+
+.primaryButton:hover,
+.secondaryButton:hover,
+.dangerButton:hover,
+.iconButton:hover,
+.modeTile:hover,
+.gameTile:hover,
+.cell:hover {
+  transform: translateY(-1px);
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.dangerButton:disabled,
+.iconButton:disabled,
+.modeTile:disabled,
+.gameTile:disabled,
+.cell:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+  transform: none;
+  box-shadow: none;
+}
+
+.identity,
+.matchBox,
+.gameStatus {
+  display: grid;
+  gap: 6px;
+  border: 1px solid rgba(23, 32, 29, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.58);
+  padding: 12px;
+}
+
+.identity span,
+.matchBox span {
+  color: #66736d;
+  font-size: 0.74rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.identity strong,
+.matchBox strong,
+.gameStatus strong {
+  color: #18211e;
+  font-size: 1.08rem;
+  overflow-wrap: anywhere;
+}
+
+.identity small,
+.gameStatus span {
+  color: #62706a;
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.matchBox {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.matchBox span,
+.matchBox strong {
+  grid-column: 1;
+}
+
+.matchBox .iconButton {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+.playerList {
+  display: grid;
+  gap: 10px;
+}
+
+.playerRow {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid rgba(23, 32, 29, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.62);
+  padding: 10px;
+}
+
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #daeae4;
+  color: #155247;
+  font-weight: 900;
+}
+
+.playerRow strong,
+.playerRow small {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.playerRow small {
+  margin-top: 2px;
+  color: #65736d;
+  font-size: 0.78rem;
+}
+
+.playerRow em {
+  border-radius: 999px;
+  background: #f2ebe1;
+  color: #6d4d22;
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 900;
+  padding: 5px 8px;
+  text-transform: uppercase;
+}
+
+.modeGrid,
+.gameGrid {
+  display: grid;
+  gap: 10px;
+}
+
+.modeTile,
+.gameTile {
+  display: grid;
+  gap: 8px 12px;
+  align-items: center;
+  width: 100%;
+  border: 1px solid rgba(23, 32, 29, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.64);
+  color: #17201d;
+  cursor: pointer;
+  font: inherit;
+  padding: 12px;
+  text-align: left;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.modeTile {
+  grid-template-columns: 1fr;
+}
+
+.gameTile {
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+}
+
+.modeTile strong,
+.modeTile span,
+.gameTile strong,
+.gameTile small {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.modeTile strong,
+.gameTile strong {
+  color: #18211e;
+  font-size: 1rem;
+}
+
+.modeTile span,
+.gameTile small {
+  margin-top: 3px;
+  color: #65736d;
+  font-size: 0.82rem;
+}
+
+.modeTileSelected,
+.gameTileSelected {
+  border-color: rgba(36, 116, 97, 0.42);
+  background: #e4f1ec;
+  box-shadow: inset 0 0 0 1px rgba(36, 116, 97, 0.2);
+}
+
+.gameIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #daeae4;
+  color: #155247;
+}
+
+.gameTile em {
+  border-radius: 999px;
+  background: #f2ebe1;
+  color: #6d4d22;
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 900;
+  padding: 5px 8px;
+  text-transform: uppercase;
+}
+
+.gameTileSelected em {
+  background: #d7ebe4;
+  color: #145046;
+}
+
+.emptyText {
+  margin: 0;
+  border: 1px dashed rgba(23, 32, 29, 0.16);
+  border-radius: 8px;
+  color: #65736d;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 14px;
+}
+
+.gamePanel {
+  display: grid;
+  gap: 16px;
+}
+
+.gameStatus {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(72px, 1fr));
+  aspect-ratio: 1;
+  gap: 8px;
+  width: min(100%, 430px);
+}
+
+.cell {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border: 1px solid rgba(23, 32, 29, 0.14);
+  border-radius: 8px;
+  background: #f9faf7;
+  color: #17201d;
+  font: inherit;
+  font-size: clamp(2rem, 8vw, 4.4rem);
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cellWin {
+  background: #d7ebe4;
+  color: #145046;
+  box-shadow: inset 0 0 0 2px rgba(36, 116, 97, 0.32);
+}
+
+.eventLog {
+  display: grid;
+  gap: 7px;
+  max-height: 180px;
+  overflow: auto;
+  border: 1px solid rgba(23, 32, 29, 0.1);
+  border-radius: 8px;
+  background: rgba(16, 23, 21, 0.92);
+  color: #edf4ef;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.82rem;
+  padding: 12px;
+}
+
+.eventLog span {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1040px) {
+  .workspace {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gamePanel {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 720px) {
+  .screen {
+    padding: 18px;
+  }
+
+  .screenWithDeveloperMenu {
+    padding-bottom: 360px;
+  }
+
+  .developerConsole {
+    top: auto;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    width: auto;
+  }
+
+  .developerConsoleHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .developerConsoleButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    margin-left: 0;
+  }
+
+  .developerConsoleBody {
+    grid-template-columns: 1fr;
+    min-height: 300px;
+    max-height: 330px;
+    overflow: auto;
+  }
+
+  .terminalPanel {
+    min-height: 220px;
+  }
+
+  .terminalLine {
+    grid-template-columns: 1fr;
+  }
+
+  .terminalDetails {
+    grid-column: 1;
+  }
+
+  .developerInfoPanel {
+    border-top: 1px solid rgba(237, 244, 239, 0.12);
+    border-left: 0;
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .statusStrip,
+  .actions {
+    width: 100%;
+  }
+
+  .statusPill,
+  .primaryButton,
+  .secondaryButton,
+  .dangerButton {
+    flex: 1 1 100%;
+  }
+
+  .workspace,
+  .fieldRow,
+  .gameStatus {
+    grid-template-columns: 1fr;
+  }
+
+  .gamePanel {
+    grid-column: auto;
+  }
+
+  .board {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

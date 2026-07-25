@@ -1,4 +1,5 @@
 import { PLAY_WITH_FRIENDS_GAMES, getGameById } from './games';
+import { LocalPlayer, MockPlayer } from '../runtime';
 import type {
   GameDefinition,
   GameSeating,
@@ -274,13 +275,12 @@ function createMockPlayer(state: PlayWithFriendsState, action: LobbyAction) {
       (player) => player.role === 'guest' && player.connection === 'mock',
     ).length + 1;
 
-  return {
+  return new MockPlayer({
     id: action.playerId,
     name: sanitizeDisplayName(action.name ?? `Friend ${mockGuestNumber}`),
     role: 'guest',
     ready: action.ready ?? false,
-    connection: 'mock',
-  } satisfies Player;
+  }).toSnapshot();
 }
 
 export function lobbyReducer(
@@ -310,13 +310,12 @@ export function lobbyReducer(
     case 'host-room': {
       const hostName = sanitizeDisplayName(state.playerName);
       const roomCode = sanitizeRoomCode(action.roomCode) || 'LOCAL1';
-      const hostPlayer: Player = {
+      const hostPlayer: Player = new LocalPlayer({
         id: action.hostPlayerId,
         name: hostName,
         role: 'host',
         ready: true,
-        connection: 'local',
-      };
+      }).toSnapshot();
 
       return {
         ...state,
@@ -349,20 +348,18 @@ export function lobbyReducer(
         localPlayerId: action.guestPlayerId,
         hostPlayerId: action.hostPlayerId,
         players: [
-          {
+          new MockPlayer({
             id: action.hostPlayerId,
             name: 'Remote host',
             role: 'host',
             ready: true,
-            connection: 'mock',
-          },
-          {
+          }).toSnapshot(),
+          new LocalPlayer({
             id: action.guestPlayerId,
             name: guestName,
             role: 'guest',
             ready: false,
-            connection: 'local',
-          },
+          }).toSnapshot(),
         ],
         eventLog: pushLog(state, `${guestName} joined preview room ${roomCode}`),
         lastError: null,
