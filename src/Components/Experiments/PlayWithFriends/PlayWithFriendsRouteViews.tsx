@@ -90,15 +90,6 @@ export function PlayWithFriendsEntryView() {
         </div>
 
         <form className={styles.form} onSubmit={handleOnlineAuth}>
-          <label className={styles.field}>
-            <span>Server key</span>
-            <input
-              type="password"
-              value={play.config.serverKey}
-              autoComplete="off"
-              onChange={(event) => play.setServerKey(event.target.value)}
-            />
-          </label>
           <div className={styles.fieldRow}>
             <label className={styles.field}>
               <span>Host</span>
