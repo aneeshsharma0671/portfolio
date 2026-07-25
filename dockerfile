@@ -1,9 +1,14 @@
 FROM node:20-alpine
 
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+RUN corepack enable
+
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install --no-fund --no-audit
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
@@ -17,7 +22,7 @@ ENV NEXT_PUBLIC_NAKAMA_HOST=$NEXT_PUBLIC_NAKAMA_HOST
 ENV NEXT_PUBLIC_NAKAMA_PORT=$NEXT_PUBLIC_NAKAMA_PORT
 ENV NEXT_PUBLIC_NAKAMA_USE_SSL=$NEXT_PUBLIC_NAKAMA_USE_SSL
 
-RUN npm run build
+RUN pnpm run build
 
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]

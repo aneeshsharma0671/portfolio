@@ -7,7 +7,7 @@ Next.js portfolio app with experiments, including the Play With Friends multipla
 Install dependencies:
 
 ```bash
-pnpm ci
+pnpm install --frozen-lockfile
 ```
 
 Run the local Next.js dev server:
@@ -45,10 +45,10 @@ Edit `.env.nakama.local` and replace every `replace-with-*` value. Use local-onl
 Validate the app:
 
 ```bash
-npm ci
-npm test
-npm run lint
-npm run build
+pnpm install --frozen-lockfile
+pnpm test
+pnpm run lint
+pnpm run build
 ```
 
 ### Install And Start Docker
@@ -217,7 +217,24 @@ Smoke check the current Play With Friends route:
 http://localhost:3000/experiments/playwithfriends
 ```
 
-This route still uses the local mock network adapter until the Nakama client adapter is implemented.
+Smoke check the Nakama-backed lobby and Tic Tac Toe route:
+
+```text
+http://localhost:3000/experiments/playwithfriends/nakama
+```
+
+The original route is still the local mock prototype. The Nakama route creates/logs in a device user, creates or joins a relayed match, tracks presences, and syncs Tic Tac Toe state through Nakama match data.
+
+If create/login shows `failed to fetch`, first check the fields on the Nakama route:
+
+```text
+Host: 3.108.212.210
+Port: 7350
+Use SSL: off when testing through http://3.108.212.210:3000
+Server key: the value of NAKAMA_SOCKET_SERVER_KEY / NEXT_PUBLIC_NAKAMA_SERVER_KEY
+```
+
+The host field must not be `127.0.0.1` unless Nakama is running on the same machine as the browser. If the fields are correct, verify that the EC2 security group allows inbound TCP `7350` from your IP. If the portfolio page is served over HTTPS, expose Nakama behind HTTPS/WSS and set `NEXT_PUBLIC_NAKAMA_USE_SSL=true`; browsers block HTTPS pages from calling a plain HTTP/WebSocket Nakama endpoint.
 
 Stop the local stack:
 
@@ -242,6 +259,8 @@ rm .env
 ## Production Deployment Notes
 
 The deploy workflow uses GitHub Actions production secrets and variables to write `.env.production` on the server, then starts the Compose stack with the `nakama` profile.
+
+Deployments pull only the `web` and `nakama` images, ensure `nakama-postgres` exists with `--no-recreate`, then force-recreate only `web` and `nakama`. Postgres is not force-restarted and the `nakama_postgres_data` volume is not removed by the deploy workflow.
 
 Before deploying, SSH into the server and confirm Docker Engine is running:
 
@@ -268,6 +287,34 @@ Then install the Compose plugin from Docker's repository:
 sudo apt-get update
 sudo apt-get install -y docker-compose-plugin
 docker compose version
+```
+
+### Open Production Nakama Console
+
+The Nakama console is bound to `127.0.0.1` on the server, so open it through an SSH tunnel from your local machine:
+
+```bash
+ssh -N -L 7351:127.0.0.1:7351 tspServer
+```
+
+Keep that terminal open, then open this URL in your browser:
+
+```text
+http://127.0.0.1:7351
+```
+
+Use `NAKAMA_CONSOLE_USERNAME` and `NAKAMA_CONSOLE_PASSWORD` from the production secrets.
+
+If local port `7351` is already in use, forward a different local port:
+
+```bash
+ssh -N -L 17351:127.0.0.1:7351 tspServer
+```
+
+Then open:
+
+```text
+http://127.0.0.1:17351
 ```
 
 Required production secrets:
