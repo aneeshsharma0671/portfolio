@@ -59,6 +59,7 @@ export type NakamaDeveloperCommand =
   | { type: 'connect' }
   | { type: 'help' }
   | { type: 'log'; message: string }
+  | { type: 'server-key' }
   | { type: 'status' }
   | { type: 'unknown'; raw: string; message: string };
 
@@ -168,6 +169,10 @@ export function parseNakamaDeveloperCommand(input: string): NakamaDeveloperComma
 
   if (command === 'status') {
     return { type: 'status' };
+  }
+
+  if (command === 'server-key' || command === 'serverkey') {
+    return { type: 'server-key' };
   }
 
   if (command === 'log') {
