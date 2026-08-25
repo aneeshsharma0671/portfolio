@@ -59,6 +59,12 @@ export default function SudokuGame() {
   }, []);
 
   useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw-sudoku.js', { scope: '/games/sudoku' });
+    }
+  }, []);
+
+  useEffect(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     if (gameState === "playing" && !isLoading && puzzle) {
       timerRef.current = setInterval(() => setSeconds((s) => s + 1), 1000);
