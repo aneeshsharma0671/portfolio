@@ -138,7 +138,6 @@ export default function SudokuGame() {
     <div className={containerClass}>
       <header className={styles.header}>
         <h1 className={styles.title}>Sudoku</h1>
-        {/* <p className={styles.subtitle}>classified puzzle archive</p> */}
       </header>
 
       <div className={styles.controls}>
