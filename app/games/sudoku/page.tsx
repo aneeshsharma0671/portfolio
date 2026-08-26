@@ -1,5 +1,4 @@
-import SudokuGame from '@/src/Components/SudokuGame/SudokuGame';
-
+import SudokuClient from './SudokuClient';
 import type { Viewport } from 'next';
 
 export const metadata = {
@@ -17,5 +16,5 @@ export const viewport: Viewport = {
 };
 
 export default function SudokuPage() {
-  return <SudokuGame />;
+  return <SudokuClient />;
 }

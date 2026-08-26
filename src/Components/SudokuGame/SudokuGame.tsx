@@ -14,6 +14,42 @@ import styles from "./SudokuGame.module.css";
 type GameState = "playing" | "won";
 type Theme = "light" | "dark";
 
+const PREFS_STORAGE_KEY = "sudoku_preferences";
+const PREFS_STORAGE_VERSION = 1;
+
+interface StoredPreferences {
+  version: number;
+  theme: Theme;
+}
+
+function loadThemePreference(): Theme {
+  try {
+    const raw = localStorage.getItem(PREFS_STORAGE_KEY);
+    if (!raw) return "light";
+    const parsed: unknown = JSON.parse(raw);
+    if (
+      typeof parsed !== "object" ||
+      parsed === null ||
+      (parsed as StoredPreferences).version !== PREFS_STORAGE_VERSION
+    ) {
+      return "light";
+    }
+    const prefs = parsed as StoredPreferences;
+    return prefs.theme === "dark" ? "dark" : "light";
+  } catch {
+    return "light";
+  }
+}
+
+function saveThemePreference(theme: Theme): void {
+  try {
+    const prefs: StoredPreferences = { version: PREFS_STORAGE_VERSION, theme };
+    localStorage.setItem(PREFS_STORAGE_KEY, JSON.stringify(prefs));
+  } catch {
+    // storage unavailable — silent fail
+  }
+}
+
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60)
     .toString()
@@ -23,7 +59,7 @@ function formatTime(seconds: number): string {
 }
 
 export default function SudokuGame() {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>(() => loadThemePreference());
   const [difficulty, setDifficulty] = useState<Difficulty>("medium");
   const [puzzle, setPuzzle] = useState<Board | null>(null);
   const [solution, setSolution] = useState<Board | null>(null);
@@ -59,8 +95,16 @@ export default function SudokuGame() {
   }, []);
 
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
+    if (!('serviceWorker' in navigator)) return;
+
+    if (process.env.NODE_ENV === 'production') {
       navigator.serviceWorker.register('/sw-sudoku.js', { scope: '/games/sudoku' });
+    } else {
+      // In dev, HMR chunks change constantly — unregister any leftover SW to
+      // prevent it serving stale bundles and causing a reload loop.
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((r) => r.unregister());
+      });
     }
   }, []);
 
@@ -169,7 +213,13 @@ export default function SudokuGame() {
         </button>
         <button
           className={styles.themeBtn}
-          onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+          onClick={() =>
+            setTheme((t) => {
+              const next = t === "light" ? "dark" : "light";
+              saveThemePreference(next);
+              return next;
+            })
+          }
           aria-label="Toggle theme"
         >
           {theme === "light" ? "◑ dark" : "◐ light"}
